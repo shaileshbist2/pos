@@ -1,0 +1,134 @@
+<div ng-if="pageLoader">
+    <div class="loading"></div>
+</div>
+
+<div ng-show="admin_role_id == 1">
+    <div class="heading-sec">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="heading-profile">
+                    <h2>INVENTORY CATEGORY</h2>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="top-bar-chart">
+                    <div class="quick-report">
+                        <div class="quick-report-infos">
+                            <h5 style="cursor: pointer" ng-click="add_inventory_category()">
+                                + Add Inventory Category
+                            </h5>
+                        </div>
+                    </div>
+                </div><!-- Top Bar Chart -->
+            </div>
+        </div>
+    </div>
+
+    <div class="panel-content">
+        <div class="row">
+            <div class="widget animate-show animate-hide" ng-show="animate">
+                <div class="step-form-sec">
+                    <form ng-submit="addInventoryCategory_SA()" name="addInventoryCategoryForm">
+                        <div class="col-lg-12 form-group">
+                            <h5>Add now</h5>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                            <label>Category Name</label>
+                            <input type="text" class="form-control text-capitalize"
+                                   ng-model="inventoryCategory.category_name" ng-required="true"
+                                   placeholder="Category Name"/>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                            <label>Select Status</label>
+                            <select class="form-control" ng-model="inventoryCategory.status" ng-required="true">
+                                <option style="display:none" value="">Select Status</option>
+                                <option ng-value="1">Active</option>
+                                <option ng-value="0">Inactive</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                            <button class="btn btn-default" style="margin-top:23px"
+                                    ng-disabled="addInventoryCategoryForm.$invalid">Add
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Edit--->
+    <div class="panel-content">
+        <div class="row">
+            <div class="widget" ng-show="editPanelIC_SA">
+                <div class="step-form-sec">
+                    <form ng-submit="updateInventoryCategory_SA()" name="updateInventoryCategoryForm">
+                        <div class="col-lg-12 form-group text-right" style="cursor:pointer;" ng-click="closeIC()">
+                            <i class="fa fa-times" aria-hidden="true"></i>
+                        </div>
+                        <div class="col-lg-12 form-group">
+                            <h5>Update now</h5>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                            <label>Category Name</label>
+                            <input type="text" class="form-control text-capitalize"
+                                   ng-model="editInventoryCategory.category_name" ng-required="true"
+                                   placeholder="Edit Category Name"/>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                            <label>Select Status</label>
+                            <select class="form-control" ng-model="editInventoryCategory.status" ng-required="true">
+                                <option style="display:none" value="">Select Status</option>
+                                <option value="1">Active</option>
+                                <option value="0">Inactive</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                            <button class="btn btn-default" style="margin-top:23px"
+                                    ng-disabled="updateInventoryCategoryForm.$invalid">Update
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="panel-content">
+        <div class="row">
+            <div class="widget">
+                <div class="table-area">
+                    <div class="widget-title" style="font-size: 10px!important;">
+                        <table class="table table-bordered table-responsive table-stripped"
+                               style="width: 100%; font-size:12px;"
+                               cellspacing="0" datatable="ng">
+                            <thead>
+                            <tr style="font-size: 12px;">
+                                <th>CATEGORY</th>
+                                <th class="text-center">STATUS</th>
+                                <th class="text-center">ACTION</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="icl in iCL">
+                                <td class="text-capitalize">
+                                    <span>{{icl.category_name}}</span>
+                                </td>
+                                <td class="text-capitalize">
+                                    <span>{{icl.status == 1 ? 'Active' : 'Inactive'}}</span>
+                                </td>
+                                <td class="text-center">
+                                    <button ng-click="editCategory_SA(icl)" class="form-control btn-sm">
+                                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

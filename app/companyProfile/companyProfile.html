@@ -1,0 +1,342 @@
+<style>
+    .fileContainer {
+        overflow: hidden;
+        position: relative;
+    }
+
+    .fileContainer [type=file] {
+        cursor: inherit;
+        display: block;
+        font-size: 8px;
+        filter: alpha(opacity=0);
+        min-height: 100%;
+        min-width: 100%;
+        opacity: 0;
+        position: absolute;
+        right: 0;
+        text-align: right;
+        top: 0;
+    }
+
+    /* Example stylistic flourishes */
+
+    .fileContainer {
+        background: #F63500;
+        color: #fff;
+        font-weight: 100;
+        font-size: 12px;
+        letter-spacing: 1px;
+        border-radius: 3px;
+        float: left;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+
+    .fileContainer [type=file] {
+        cursor: pointer;
+    }
+</style>
+<style>
+    .cropArea {
+        background: #fff;
+        overflow: hidden;
+        width: 266px;
+        height: 183px;
+        border-radius: 5px;
+    }
+
+    #imgCrp canvas {
+        margin-top: -83px !important;
+        margin-left: -126px !important;
+        cursor: default !important;
+    }
+</style>
+<span ng-if="pageLoader">
+    <div class="loading"></div>
+</span>
+<div ng-show="admin_role_id == 1">
+
+    <div class="heading-sec">
+        <div class="row">
+            <div class="col-md-6 col-lg-6 col-sm-6">
+                <div class="heading-profile">
+                    <h2>MANAGE COMPANY PROFILE</h2>
+                <span ng-if="pageLoader">
+                   <div class="loading"></div>
+                </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="panel-content">
+        <div class="row">
+            <div class="widget" style="padding: 12px;">
+                <div class="row">
+                    <div class="col-md-7 col-lg-7 col-sm-7">
+                        <div class="row" style="padding: 12px;">
+                            <div class="col-lg-12 col-md-12 col-sm-12">
+                                <!--------------- Company Name-------------------->
+                                <div class="row" style="background: #fafafa; padding: 6px; border-radius: 4px;">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">Company Name</div>
+                                    <span ng-hide="company_name_view">
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                            <div class="col-lg-10 text-uppercase">{{company_name}}</div>
+                                        </div>
+                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"><span
+                                                ng-click="edit_company_name()"
+                                                style="color: #1b7fad; cursor: pointer;">Edit</span>
+                                        </div>
+                                    </span>
+                                    <span ng-show="update_company_name">
+                                        <form name="companyNameForm">
+                                            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+                                            <input type="text" ng-model="company_name"
+                                                   class="form-control input-sm text-uppercase"
+                                                   placeholder="Company Name" ng-required="true"/>
+                                        </div>
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                                            <button ng-disabled="companyNameForm.$invalid" ng-click="updateCompanyName()"  class="btn btn-default btn-sm">
+                                                <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                                            </button>
+                                            <button ng-click="cancel_company_name()" class="btn btn-default btn-sm">
+                                                <i class="fa fa-times" aria-hidden="true"></i>
+                                            </button>
+                                        </div>
+                                        </form>
+
+                                    </span>
+                                </div>
+                                <br/>
+                                <!--------------- Company Nick Name -------------------->
+                                <div class="row" style="background: #fafafa; padding: 6px; border-radius: 4px;">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">Company Nick Name</div>
+                                    <span ng-hide="company_nick_name_view">
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                            <div class="col-lg-10 text-uppercase">{{company_nick_name}}</div>
+                                        </div>
+                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"><span
+                                                ng-click="edit_company_nick_name()"
+                                                style="color: #1b7fad; cursor: pointer;">Edit</span>
+                                        </div>
+                                    </span>
+                                    <span ng-show="update_company_nick_name">
+                                        <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+                                            <input type="text" ng-model="company_nick_name"
+                                                   class="form-control input-sm text-uppercase"
+                                                   placeholder="Company Nick Name"/>
+                                        </div>
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                                            <button ng-click="updateCompanyNickName()" class="btn btn-default btn-sm">
+                                                <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                                            </button>
+                                            <button ng-click="cancel_company_nick_name()"
+                                                    class="btn btn-default btn-sm">
+                                                <i class="fa fa-times" aria-hidden="true"></i>
+                                            </button>
+                                        </div>
+                                    </span>
+                                </div>
+                                <br/>
+                                <!-------- Company CIN ----------->
+                                <div class="row" style="background: #fafafa; padding: 6px; border-radius: 4px;">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">Company CIN</div>
+                                    <span ng-hide="CIN_view">
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                            <div class="col-lg-10 text-uppercase">{{company_cin}}</div>
+                                        </div>
+                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"><span
+                                                ng-click="edit_CIN()"
+                                                style="color: #1b7fad; cursor: pointer;">Edit</span>
+                                        </div>
+                                    </span>
+                                    <span ng-show="update_CIN">
+                                        <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+                                            <input type="text" ng-model="company_cin"
+                                                   class="form-control input-sm text-uppercase"
+                                                   placeholder="Company CIN"/>
+                                        </div>
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                                            <button ng-click="updateCIN()" class="btn btn-default btn-sm">
+                                                <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                                            </button>
+                                            <button ng-click="cancel_cin()" class="btn btn-default btn-sm">
+                                                <i class="fa fa-times" aria-hidden="true"></i>
+                                            </button>
+                                        </div>
+                                    </span>
+                                </div>
+                                <br/>
+                                <!-------- Company STN ----------->
+                                <div class="row" style="background: #fafafa; padding: 6px; border-radius: 4px;">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">Company STN</div>
+                                    <span ng-hide="STN_view">
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                            <div class="col-lg-10 text-uppercase">{{company_stn}}</div>
+                                        </div>
+                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"><span
+                                                ng-click="edit_STN()"
+                                                style="color: #1b7fad; cursor: pointer;">Edit</span>
+                                        </div>
+                                    </span>
+                                    <span ng-show="update_STN">
+                                        <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+                                            <input type="text" ng-model="company_stn"
+                                                   class="form-control input-sm text-uppercase"
+                                                   placeholder="Company STN"/>
+                                        </div>
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                                            <button ng-click="updateSTN()" class="btn btn-default btn-sm">
+                                                <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                                            </button>
+                                            <button ng-click="cancel_STN()" class="btn btn-default btn-sm">
+                                                <i class="fa fa-times" aria-hidden="true"></i>
+                                            </button>
+                                        </div>
+                                    </span>
+                                </div>
+                                <br/>
+                                <!------- Company TIN CST -------->
+                                <div class="row" style="background: #fafafa; padding: 6px; border-radius: 4px;">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">Company TIN/CST</div>
+                                    <span ng-hide="TINCST_view">
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                            <div class="col-lg-10 text-uppercase">{{company_tin_cst}}</div>
+                                        </div>
+                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"><span
+                                                ng-click="edit_TINCST()"
+                                                style="color: #1b7fad; cursor: pointer;">Edit</span>
+                                        </div>
+                                    </span>
+                                    <span ng-show="update_TINCST">
+                                        <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+                                            <input type="text" ng-model="company_tin_cst"
+                                                   class="form-control input-sm text-uppercase"
+                                                   placeholder="Company TIN/CST"/>
+                                        </div>
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                                            <button ng-click="updateTINCST()" class="btn btn-default btn-sm">
+                                                <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                                            </button>
+                                            <button ng-click="cancel_TINCST()" class="btn btn-default btn-sm">
+                                                <i class="fa fa-times" aria-hidden="true"></i>
+                                            </button>
+                                        </div>
+                                    </span>
+                                </div>
+                                <br/>
+                                <!------- Company TAX VAT -------->
+                                <div class="row" style="background: #fafafa; padding: 6px; border-radius: 4px;">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">TAX/VAT</div>
+                                    <span ng-hide="TAXVAT_view">
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                            <div class="col-lg-10 text-uppercase">{{company_vat}}</div>
+                                        </div>
+                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"><span
+                                                ng-click="edit_TAXVAT()"
+                                                style="color: #1b7fad; cursor: pointer;">Edit</span>
+                                        </div>
+                                    </span>
+                                    <span ng-show="update_TAXVAT">
+                                        <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+                                            <input type="text" ng-model="company_vat"
+                                                   class="form-control input-sm text-uppercase"
+                                                   placeholder="TAX/VAT" valid-number/>
+                                        </div>
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                                            <button ng-click="updateTAXVAT()" class="btn btn-default btn-sm">
+                                                <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                                            </button>
+                                            <button ng-click="cancel_TAXVAT()" class="btn btn-default btn-sm">
+                                                <i class="fa fa-times" aria-hidden="true"></i>
+                                            </button>
+                                        </div>
+                                    </span>
+                                </div>
+
+                            </div>
+                        </div>
+                        <!--<div class="more-option">
+                            <span></span>
+                        </div>-->
+                    </div>
+                    <div class="col-md-5 col-lg-5 col-sm-5">
+                        <div class="col-lg-12 col-md-12 col-sm-12">
+                            <div class="row" ng-hide="selectImage" style="padding: 12px; text-align: center">
+                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                    <img ng-src="{{company_logo}}" height="150" id="companyLogo" style="border-radius: 5px;padding: 5px;"/>
+                                </div>
+                                <div class="row">&nbsp;</div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-lg-offset-4">
+                                    <label class="fileContainer">
+                                        <i class="fa fa-plus" aria-hidden="true"></i>
+                                        Upload Logo
+                                        <input type="file" id="fileInput"/>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4" ng-show="showUploadImagePreview">
+                            <div class="row">&nbsp;</div>
+                            <div class="row" style="padding: 6px;">
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-lg-offset-4">
+                                    <div class="cropArea">
+                                        <img-crop image="myImage" result-image="myCroppedImage" id="imgCrp"></img-crop>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-lg-offset-10">
+                                    <div class="col-lg-8">
+                                        <button ng-click="updateCompanyLogo()" class="btn btn-default btn-sm">Upload</button>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <button ng-click="cancelCompanyLogo()" class="btn btn-default btn-sm">Cancel</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="panel-content">
+        <div class="row">
+            <div class="widget" style="padding: 12px;">
+                <div class="row">
+                    <div class="col-lg-6 col-md-6">
+                        <h4>Company Address</h4>
+                    </div>
+                </div>
+                <div class="row">&nbsp;</div>
+                <div class="row" style="background: #fafafa; border-radius: 5px; padding: 12px;">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 text-capitalize">
+                            <span ng-hide="companyAddressShow">{{company_address}}</span>
+                            <input type="text" ng-model="company_address" ng-show="address_inputOpt"
+                                   class="form-control input-sm text-capitalize"/>
+                        </div>
+                        <div class="col-lg-2 col-md-2">
+                            <span ng-click="editCompanyAddressBtn()" style="color: #1b7fad; cursor: pointer;"
+                                  ng-hide="companyAddressHide">Edit</span>
+                            <button class="btn btn-default btn-sm" ng-show="address_saveOpt"
+                                    ng-click="updateAddressInfo()">
+                                <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                            </button>
+                            <button class="btn btn-default btn-sm" ng-show="address_cancelOpt"
+                                    ng-click="cancelAddressInfo()">
+                                <i class="fa fa-times" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

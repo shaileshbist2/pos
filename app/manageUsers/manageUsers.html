@@ -1,0 +1,407 @@
+<style>
+    .ng-invalid.ng-touched {
+        border-color: red !important;
+    }
+    #errorEmail_id, #errorPassword {
+        font-size: 11px;
+        position: absolute;
+        height: 24px;
+        color: #fff;
+        background: rgba(171, 0, 0, 0.42);
+        padding: 4px 10px 9px;
+        border-radius: 12px;
+        top: 0px;
+        left: 128px;
+    }
+
+    #addUserEmailExistError_SA, #updateUserEmailExistError_SA, #addUserEmailExistError_A,  #updateUserEmailExistError_A{
+        font-size: 12px;
+        color: red;
+    }
+</style>
+
+<span ng-if="pageLoader">
+    <div class="loading"></div>
+</span>
+
+
+<div ng-show="admin_role_id == 1">
+    <div class="heading-sec">
+        <div class="row">
+            <div class="col-md-4 column">
+                <div class="heading-profile">
+                    <h2>MANAGE USERS</h2>
+                </div>
+            </div>
+            <div class="col-md-8 column">
+                <div class="top-bar-chart">
+                    <div class="quick-report">
+                        <div class="quick-report-infos">
+                            <h5 style="cursor: pointer" ng-click="add_user_SA()" ng-show="addUserOpt_SA">
+                                + Add New User
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="widget  animate-show animate-hide" ng-show="animate">
+        <div class="step-form-sec">
+            <form name="addUserForm" ng-submit="addNewUser_SA()">
+                <div class="col-lg-12 form-group">
+                    <h5>Add New Item</h5>
+                    <span ng-if="addUserFailedError"></span>
+                    <span ng-show="addUserEmailExistError_SA" id="addUserEmailExistError_SA">Email already exist</span>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                    <label>Select Location</label>
+                    <select class="form-control text-capitalize input-sm" ng-model="locationList_SA.branch_id"
+                            ng-options="locationList_SA.branch_id as locationList_SA.location_name for locationList_SA in mU_lL_SA"
+                            ng-change="getUserList_manageUsers_SA()">
+                        <option style="display:none" value="">Select Location</option>
+                    </select>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                    <label>First Name</label>
+                    <input type="text" class="form-control text-capitalize" ng-model="user.first_name"
+                           placeholder="First Name" ng-pattern="/^[a-zA-Z\s]*$/"
+                           ng-required="true"/>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                    <label>Last Name</label>
+                    <input type="text" class="form-control" ng-model="user.last_name" placeholder="Last Name"
+                           ng-pattern="/^[a-zA-Z\s]*$/" ng-required="true" />
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                    <label>Email Id</label>
+                    <span id="errorEmail_id" ng-show="addUserForm.email_id.$invalid && addUserForm.email_id.$touched">Enter valid email</span>
+                    <input type="text" class="form-control" ng-model="user.email_id" name="email_id" placeholder="Email Id"
+                           ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/" ng-required="true" />
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                    <label>Password</label>
+                    <span id="errorPassword" ng-show="addUserForm.password.$invalid && addUserForm.password.$touched">Should be 6 characters long</span>
+                    <input type="password" class="form-control" ng-model="user.password" name="password" placeholder="Password"
+                           ng-required="true" minlength="6" />
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                    <label>Mobile Number</label>
+                    <input type="text" class="form-control" ng-model="user.mobile_number" placeholder="Mobile Number"
+                           ng-required="true" ng-maxlength="10" ng-minlength="10" valid-number />
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                    <label>Select Status</label>
+                    <select class="form-control" ng-model="user.status" ng-required="true">
+                        <option style="display:none" value="">Select Status</option>
+                        <option ng-value="1">Active</option>
+                        <option ng-value="0">Inactive</option>
+                    </select>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                    <button class="btn btn-default" style="margin-top:23px" ng-disabled="addUserForm.$invalid">Add
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <div class="widget" ng-show="updateUserContainer_SA">
+        <div class="step-form-sec">
+            <div class="col-lg-11 form-group">&nbsp;</div>
+            <div class="col-lg-1 form-group">
+                <button class="btn btn-default btn-sm" ng-click="backBtn_SA()">Back</button>
+            </div>
+            <form name="updateUserForm" ng-submit="updateUser_SA()">
+                <div class="col-lg-12 form-group">
+                    <h5>Add New Item</h5>
+                    <span ng-if="updateUserFailedError"></span>
+                    <span ng-show="updateUserEmailExistError_SA" id="updateUserEmailExistError_SA">Email already exist</span>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                    <label>First Name</label>
+                    <input type="text" class="form-control text-capitalize" ng-model="update_first_name"
+                           placeholder="First Name" ng-pattern="/^[a-zA-Z\s]*$/"
+                           ng-required="true"/>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                    <label>Last Name</label>
+                    <input type="text" class="form-control" ng-model="update_last_name" placeholder="Last Name"
+                           ng-pattern="/^[a-zA-Z\s]*$/" ng-required="true" />
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                    <label>Email Id</label>
+                    <!--<span id="errorUpdateEmail_id" ng-show="updateUserForm.email_id.$invalid && updateUserForm.email_id.$touched">Enter valid email</span>-->
+                    <input type="text" class="form-control" ng-model="update_email_id" name="email_id" placeholder="Email Id"
+                           ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/" ng-required="true" />
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                    <label>Password</label>
+                    <!--<span id="errorUpdatePassword" ng-show="updateUserForm.password.$invalid && updateUserForm.password.$touched">Enter valid password</span>-->
+                    <input type="password" class="form-control" ng-model="update_password" name="password" placeholder="Password" minlength="6" />
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                    <label>Mobile Number</label>
+                    <input type="text" class="form-control" ng-model="update_mobile_number" placeholder="Mobile Number"
+                           ng-required="true" ng-pattern="/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/" valid-number />
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                    <label>Select Status</label>
+                    <select class="form-control" ng-model="update_status" ng-required="true">
+                        <option style="display:none" value="">Select Status</option>
+                        <option value="1">Active</option>
+                        <option value="0">Inactive</option>
+                    </select>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                    <button class="btn btn-default" style="margin-top:23px" ng-disabled="updateUserForm.$invalid">Update
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <div class="panel-content">
+        <div class="row" ng-show="userList">
+            <div class="widget">
+                <div class="table-area">
+                    <div class="col-lg-12 col-md-12 col-sm-12"
+                         style="background: #F7F7F7; padding: 11px 13px 7px 16px; border-radius: 5px;">
+                        <div class="col-lg-12 col-md-12 col-sm-12">
+                            <div class="col-lg-4">
+                                <h6>Select Location</h6>
+                            </div>
+                            <div class="col-lg-3 pull-right">
+                                <select class="form-control text-capitalize input-sm" ng-model="locationList_SA.branch_id"
+                                        ng-options="locationList_SA.branch_id as locationList_SA.location_name for locationList_SA in mU_lL_SA"
+                                        ng-change="getUserList_manageUsers_SA()">
+                                    <option style="display:none" value="">Select Location</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="widget-title">
+                        <table class="table table-bordered table-responsive table-stripped"
+                               style="font-size:12px; width: 100%;" cellspacing="0" datatable="ng">
+                            <thead>
+                            <tr>
+                                <th>USER NAME</th>
+                                <th class="text-center">EMAIL</th>
+                                <th class="text-center">MOBILE</th>
+                                <th class="text-center">STATUS</th>
+                                <th class="text-center">ACTION</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="user_SA in uL_SA">
+                                <td class="text-capitalize">
+                                    <span>{{user_SA.user_first_name +' '+ user_SA.user_last_name}}</span>
+                                </td>
+                                <td class="text-center">
+                                    <span>{{user_SA.user_email}}</span>
+                                </td>
+                                <td class="text-capitalize text-center">
+                                    <span>{{user_SA.user_phone}}</span>
+                                </td>
+                                <td class="text-capitalize text-center">
+                                    <span>{{user_SA.status}}</span>
+                                </td>
+                                <td class="text-center">
+                                    <button ng-click="editUser_SA(user_SA.user_id)" class="form-control btn-sm">
+                                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div ng-show="admin_role_id == 2">
+    <div class="heading-sec">
+        <div class="row">
+            <div class="col-md-4 column">
+                <div class="heading-profile">
+                    <h2>Manage Users</h2>
+                </div>
+            </div>
+            <div class="col-md-8 column">
+                <div class="top-bar-chart">
+                    <div class="quick-report">
+                        <div class="quick-report-infos">
+                            <h5 style="cursor: pointer" ng-click="add_user_A()" ng-show="addUserOpt_A">
+                                + Add New User
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="widget animate-show animate-hide" ng-show="animate">
+        <div class="step-form-sec">
+            <form name="addUserForm_A" ng-submit="addNewUser_A()">
+                <div class="col-lg-12 form-group">
+                    <h5>Add New User</h5>
+                    <span ng-show="addUserEmailExistError_A" id="addUserEmailExistError_A">Email already exist</span>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                    <label>First Name</label>
+                    <input type="text" class="form-control text-capitalize" ng-model="user.first_name_A"
+                           placeholder="First Name" ng-pattern="/^[a-zA-Z\s]*$/"
+                           ng-required="true"/>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                    <label>Last Name</label>
+                    <input type="text" class="form-control" ng-model="user.last_name_A" placeholder="Last Name"
+                           ng-pattern="/^[a-zA-Z\s]*$/" ng-required="true" />
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                    <label>Email Id</label>
+                    <span id="errorEmail_id_A" ng-show="addUserForm_A.email_id.$invalid && addUserForm.email_id.$touched">Enter valid email</span>
+                    <input type="text" class="form-control" ng-model="user.email_id_A" name="email_id" placeholder="Email Id"
+                           ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/" ng-required="true" />
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                    <label>Password</label>
+                    <span id="errorPassword_A" ng-show="addUserForm_A.password.$invalid && addUserForm.password.$touched">Should be 6 characters long</span>
+                    <input type="password" class="form-control" ng-model="user.password_A" name="password" placeholder="Password"
+                           ng-required="true" minlength="6" />
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                    <label>Mobile Number</label>
+                    <input type="text" class="form-control" ng-model="user.mobile_number_A" placeholder="Mobile Number"
+                           ng-required="true" ng-minlength="10" ng-maxlength="10" valid-number />
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                    <label>Select Status</label>
+                    <select class="form-control" ng-model="user.status_A" ng-required="true">
+                        <option style="display:none" value="">Select Status</option>
+                        <option ng-value="1">Active</option>
+                        <option ng-value="0">Inactive</option>
+                    </select>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                    <button class="btn btn-default" style="margin-top:23px" ng-disabled="addUserForm_A.$invalid">Add
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+
+    <div class="widget" ng-show="updateUserContainer_A">
+        <div class="step-form-sec">
+            <div class="col-lg-11 form-group">&nbsp;</div>
+            <div class="col-lg-1 form-group">
+                <button class="btn btn-default btn-sm" ng-click="backBtn_A()">Back</button>
+            </div>
+            <form name="updateUserForm_A" ng-submit="updateUser_A()">
+                <div class="col-lg-12 form-group">
+                    <h5>Update User</h5>
+                    <span ng-if="updateUserFailedError_A"></span>
+                    <span ng-show="updateUserEmailExistError_A" id="updateUserEmailExistError_A">Email already exist</span>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                    <label>First Name</label>
+                    <input type="text" class="form-control text-capitalize" ng-model="update_first_name_A"
+                           placeholder="First Name" ng-pattern="/^[a-zA-Z\s]*$/"
+                           ng-required="true"/>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                    <label>Last Name</label>
+                    <input type="text" class="form-control" ng-model="update_last_name_A" placeholder="Last Name"
+                           ng-pattern="/^[a-zA-Z\s]*$/" ng-required="true" />
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                    <label>Email Id</label>
+                    <span id="errorUpdateEmail_id_A" ng-show="updateUserForm_A.email_id.$invalid && updateUserForm.email_id.$touched">Enter valid email</span>
+                    <input type="text" class="form-control" ng-model="update_email_id_A" name="email_id" placeholder="Email Id"
+                           ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/" ng-required="true" />
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                    <label>Password</label>
+                    <span id="errorUpdatePassword_A" ng-if="updateUserForm_A.password.$invalid && updateUserForm.password.$touched">Should be 6 characters long</span>
+                    <input type="password" class="form-control" ng-model="update_password_A" name="password" placeholder="Password" minlength="6" />
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                    <label>Mobile Number</label>
+                    <input type="text" class="form-control" ng-model="update_mobile_number_A" placeholder="Mobile Number"
+                           ng-required="true" ng-pattern="/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/" valid-number />
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                    <label>Select Status</label>
+                    <select class="form-control" ng-model="update_status_A" ng-required="true">
+                        <option style="display:none" value="">Select Status</option>
+                        <option value="1">Active</option>
+                        <option value="0">Inactive</option>
+                    </select>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                    <button class="btn btn-default" style="margin-top:23px" ng-disabled="updateUserForm_A.$invalid">Update
+                    </button>
+                </div>
+                <div class="row">&nbsp;</div>
+            </form>
+        </div>
+    </div>
+
+
+    <div class="panel-content">
+        <div class="row" ng-show="userList_A">
+            <div class="widget">
+                <div class="table-area">
+                    <div class="widget-title">
+                        <table class="table table-bordered table-responsive table-stripped"
+                               style="font-size:12px; width: 100%;" cellspacing="0" datatable="ng">
+                            <thead>
+                            <tr>
+                                <th>USER NAME</th>
+                                <th class="text-center">EMAIL</th>
+                                <th class="text-center">MOBILE</th>
+                                <th class="text-center">STATUS</th>
+                                <th class="text-center">ACTION</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="user_A in uL_A">
+                                <td class="text-capitalize">
+                                    <span>{{user_A.user_first_name +' '+ user_A.user_last_name}}</span>
+                                </td>
+                                <td class="text-center">
+                                    <span>{{user_A.user_email}}</span>
+                                </td>
+                                <td class="text-capitalize text-center">
+                                    <span>{{user_A.user_phone}}</span>
+                                </td>
+                                <td class="text-capitalize text-center">
+                                    <span>{{user_A.status}}</span>
+                                </td>
+                                <td class="text-center">
+                                    <button ng-click="editUser_A(user_A.user_id)" class="form-control btn-sm">
+                                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

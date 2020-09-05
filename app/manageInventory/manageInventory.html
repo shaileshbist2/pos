@@ -1,0 +1,162 @@
+<!--<div id="progressBar"></div>-->
+<div ng-if="pageLoader">
+    <div class="loading"></div>
+</div>
+
+<div ng-show="admin_role_id == 1">
+    <div class="heading-sec">
+        <div class="row">
+            <div class="col-md-4 column">
+                <div class="heading-profile">
+                    <h2>WAREHOUSE INVENTORY</h2>
+                </div>
+            </div>
+            <div class="col-md-8 column">
+                <div class="top-bar-chart">
+                    <div class="quick-report">
+                        <div class="quick-report-infos">
+                            <h5 style="cursor: pointer" ng-click="add_inventory_SA()">
+                                + Add New Inventory Item
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel-content">
+        <div class="row">
+            <div class="widget animate-show animate-hide" ng-show="animate">
+                <div class="step-form-sec">
+                    <form ng-submit="add_new_inventory_SA()" name="addInventoryForm">
+                        <div class="col-lg-12 form-group">
+                            <h5>Add New Inventory</h5>
+                        </div>
+                        <div class="col-lg-12 form-group">
+                            <span ng-show="InventoryExistError_SA" style="color:#FA787E;">Inventory Already Exist</span>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                            <label>Inventory Name</label>
+                            <input type="text" class="form-control text-capitalize" ng-model="inventory.inventory_name"
+                                   placeholder="Inventory Name"
+                                   ng-required="true"/>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                            <label>Measurement</label>
+                            <select class="form-control text-capitalize" ng-model="inventory.measurement_id"
+                                    ng-options="mL.measurement_id as mL.measurement for mL in measurementList"
+                                    ng-required="true">
+                                <option style="display: none;" value="">Select Measurement</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                            <button class="btn btn-default" style="margin-top:23px"
+                                    ng-disabled="addInventoryForm.$invalid">
+                                Add
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="panel-content">
+        <div class="row">
+            <div class="widget">
+                <div class="table-area">
+                    <div class="widget-title">
+                        <div class="modal fade" id="myModal" role="dialog">
+                            <div class="modal-dialog modal-sm">
+                                <div class="modal-content">
+                                    <form name="quantity_form" role="form">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            <h5 class="modal-title">Add Quantity</h5>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="form-group">
+                                                <label>Quantity</label>
+                                                <input type="text" class="form-control" id="quantity" name="quantity"
+                                                       ng-model="addQuantity.quantity"
+                                                       ng-required="true"/>
+                                                <div class="required" ng-messages="quantity_form.quantity.$error"
+                                                     ng-show="!quantity_form.quantity.$valid">
+                                                    <div ng-message="required">Quantity is required!</div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-success btn-sm"
+                                                    ng-disabled="!quantity_form.$valid"
+                                                    ng-click="saveQuantity()">Add
+                                            </button>
+                                            <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">
+                                                Cancel
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <table class="table table-bordered table-responsive table-stripped"
+                               style="font-size:12px; width: 100%;" cellspacing="0" datatable="ng">
+                            <thead>
+                            <tr>
+                                <th>INVENTORY NAME</th>
+                                <th>MEASUREMENT</th>
+                                <th class="text-center">QUANTITY</th>
+                                <th class="text-center">ACTION</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="il in IL_SA">
+                                <td style="width: 30%" class="text-capitalize">
+                                    <span ng-hide="inventoryName == il.inventory_id">{{il.inventory_name}}</span>
+                                    <input type="text" ng-model="il.inventory_name"
+                                           ng-show="inventoryNameSelected == il.inventory_id"
+                                           class="form-control input-sm text-capitalize"/>
+                                </td>
+                                <td style="width: 30%" class="text-capitalize">
+                                    <span ng-hide="measurement == il.inventory_id">{{il.measurement}}</span>
+                                    <select ng-show="measurementSelected == il.inventory_id"
+                                            ng-model="il.measurement_id"
+                                            ng-options="mL.measurement_id as mL.measurement for mL in measurementList"
+                                            class="form-control input-sm" ng-required="true">
+                                        <option style="display: none;" value="">Select Measurement</option>
+                                    </select>
+                                </td>
+                                <td style="width: 20%" class="text-center">
+                                    {{::il.quantity}}
+                                </td>
+                                <td style="width: 20%" class="text-center">
+                                    <button ng-click="editInventory_SA(il.inventory_id)" class="form-control btn-sm"
+                                            ng-hide="editBtn == il.inventory_id">
+                                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                    </button>
+                                    <button ng-click="updateInventory_SA(il)" class="form-control btn-sm"
+                                            ng-show="saveBtn == il.inventory_id">
+                                        <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                                    </button>
+                                    <button ng-show="cancelBtn == il.inventory_id" class="form-control btn-xs"
+                                            ng-click="cancelInventory_SA()">
+                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                    </button>
+
+                                    <button type="button" class="btn btn-info btn-sm" data-toggle="modal"
+                                            ng-click="showAddQuantity(il)"
+                                            data-target="#myModal"><i class="fa fa-plus"></i> Quantity
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

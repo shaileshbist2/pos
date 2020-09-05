@@ -1,0 +1,63 @@
+<span ng-if="pageLoader">
+    <div class="loading"></div>
+</span>
+
+<div ng-show="admin_role_id == 1">
+    <div class="heading-sec">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="heading-profile">
+                    <h2>MANAGE PROMOTIONAL OFFER</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel-content">
+        <div class="row">
+            <div class="widget">
+                <div class="table-area">
+                    <div class="widget-title">
+                        <table class="table table-bordered table-responsive table-stripped"
+                               style="font-size:12px; width: 100%;" cellspacing="0" datatable="ng">
+                            <thead>
+                            <tr>
+                                <th>LOCATION NAME</th>
+                                <th class="text-center">PROMOTIONAL OFFER</th>
+                                <th class="text-center">ACTION</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="offerL in olL">
+                                    <td class="text-capitalize">
+                                        <span>{{offerL.location_name}}</span>
+                                    </td>
+                                    <td class="text-center">
+                                        <span ng-hide="pO == offerL.branch_id">{{offerL.promotional_offer}}</span>
+                                        <input ng-show="pO == offerL.branch_id" type="text"
+                                               ng-model="offerL.promotional_offer" class="form-control input-sm"
+                                               placeholder="promotional offer" valid-number />
+                                    </td>
+                                    <td class="text-center">
+                                        <button ng-hide="editBtn == offerL.branch_id"
+                                                ng-click="editOffer_SA(offerL.branch_id)" class="form-control btn-sm">
+                                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                        </button>
+                                        <button ng-show="saveBtn == offerL.branch_id"
+                                                ng-click="updateOffer(offerL.branch_id, offerL.promotional_offer)"
+                                                class="form-control btn-sm">
+                                            <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                                        </button>
+                                        <button ng-show="cancelBtn == offerL.branch_id" ng-click="cancelOffer_SA()"
+                                                class="form-control btn-sm">
+                                            <i class="fa fa-times" aria-hidden="true"></i>
+                                        </button>
+                                    </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,472 @@
+<!--<div id="progressBar"></div>-->
+
+<span ng-if="pageLoader">
+    <div class="loading"></div>
+</span>
+
+
+<div ng-show="admin_role_id == 1">
+    <div class="heading-sec">
+        <div class="row">
+            <div class="col-md-4 column">
+                <div class="heading-profile">
+                    <h2>MANAGE ITEMS</h2>
+                </div>
+            </div>
+            <div class="col-md-8 column">
+                <div class="top-bar-chart">
+                    <div class="quick-report">
+                        <div class="quick-report-infos">
+                            <h5 style="cursor: pointer" ng-click="add_item_SA()">
+                                + Add New Item
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel-content">
+        <div class="row">
+            <div class="widget animate-show animate-hide" ng-show="animate">
+                <div class="step-form-sec">
+                    <form ng-submit="addItems_SA()" name="addItemsForm">
+                        <div class="col-lg-12 form-group">
+                            <h5>Add New Item</h5>
+                        </div>
+                        <div class="col-lg-12 form-group">
+                            <span ng-show="itemExistError_SA" style="color:#FA787E;">Item Already Exist</span>
+                            <!--<span ng-show="inventoryItemErrorMsg_SA" style="color:#FA787E;">Please add atleast one inventory item</span>-->
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                            <label>Select Location</label>
+                            <select class="form-control text-capitalize input-sm" ng-model="locationList_SA.branch_id"
+                                    ng-options="locationList_SA.branch_id as locationList_SA.location_name for locationList_SA in lL_SA"
+                                    ng-change="getCategoryList_manageItems_SA(); getInventoryList_SA();">
+                                <option style="display:none" value="">Select Location</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                            <label>Select Category</label>
+                            <select class="form-control input-sm" ng-model="categoryList_SA.category_id"
+                                    ng-options="categoryList_SA.category_id as categoryList_SA.category_name for categoryList_SA in cL_SA"
+                                    ng-change="getItemList_manageItems_SA(categoryList_SA.category_id)">
+                                <option style="display:none" value="">Select Category</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                            <label>Item Name</label>
+                            <input type="text" class="form-control text-capitalize input-sm" ng-model="item.item_name"
+                                   placeholder="Item Name"
+                                   ng-required="true"/>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                            <div class="col-lg-8 col-md-8 col-sm-8">
+                                <label>Item Price</label>
+                                <input type="text" class="form-control input-sm" ng-model="item.item_price"
+                                       placeholder="Item Price"
+                                       ng-required="itemRequired" valid-number ng-disabled="itemPrice_disabled"/>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4">
+                                <label>&nbsp;</label><br/>
+                                <label>MRP</label> &nbsp; <input type="checkbox" class="btn btn-default"
+                                                                 ng-model="item.checked" ng-checked="false"
+                                                                 ng-click="hidePriceOpt_SA()"/>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                            <label>Select Status</label>
+                            <select class="form-control input-sm" ng-model="item.status" ng-required="true">
+                                <option style="display:none" value="">Select Status</option>
+                                <option ng-value="1">Active</option>
+                                <option ng-value="0">Inactive</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                            <a class="btn btn-default btn-sm" ng-click="addInventory()" style="margin-top: 25px;">+ Add
+                                Inventory</a>
+                        </div>
+                        <div class="row">&nbsp;</div>
+                        <fieldset data-ng-repeat="choice in choices">
+                            <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                                <label>Select Inventory</label>
+                                <select class="form-control input-sm" ng-model="choice.inventory"
+                                        ng-options="inventory_SA.inventory_id as inventory_SA.inventory_name for inventory_SA in inventoryList_SA">
+                                    <option style="display:none;" value="">Select Inventory</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                                <label>Quantity</label>
+                                <input type="text" ng-model="choice.quantity" class="form-control input-sm"
+                                       placeholder="Enter Quantity" valid-number ng-required="true"/>
+                            </div>
+                            <div class="col-lg-2 col-md-2 col-sm-2 form-group">
+                                <button class="btn btn-danger btn-sm remove" ng-show="$last"
+                                        ng-click="removeInventory()" style="margin-top: 25px;">
+                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        </fieldset>
+                        <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                            <button class="btn btn-default" style="margin-top:23px" ng-disabled="addItemsForm.$invalid">
+                                Add
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--********* Edit Item ***********--->
+    <div class="panel-content">
+        <div class="row" ng-show="editItemPanel_SA">
+            <div class="widget" style="padding: 12px;">
+                <form name="editItemsForm">
+                    <div class="form-group text-right" ng-click="closeEditPanel_SA()">
+                        <i class="fa fa-times" aria-hidden="true" style="cursor: pointer;"></i>
+                    </div>
+                    <div class="col-lg-12 col-md-12">
+                        <h5>Update Item</h5>
+                        <div class="" ng-show="editItemErrorMsg" style="color: red;">Please Enter Item Price</div>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                        <label>Item Name</label>
+                        <input type="text" ng-model="item_details.item_name" placeholder="Item Name Edit"
+                               class="form-control input-sm" ng-required="true"/>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                        <label>Item Price</label>
+                        <input type="text" ng-model="item_details.item_price" ng-required="editItemRequired"
+                               ng-disabled="editItemPrice_disabled" placeholder="Item Price Edit"
+                               class="form-control input-sm" valid-number/>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                        <br/>
+                        <label>MRP</label>
+                        <input type="checkbox" class="btn btn-default" ng-model="editItem.checked" ng-checked="false"
+                               ng-click="editHidePriceOpt_SA()"/>
+                    </div>
+                    <div class="row">&nbsp;</div>
+
+                    <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                        <label>Select Status</label>
+                        <select ng-model="item_details.status" ng-selected="item_details.status" class="form-control">
+                            <option style="display: none;" value="">Please enter</option>
+                            <option value="1">Active</option>
+                            <option value="0">Inactive</option>
+                        </select>
+                    </div>
+                    <!--Add Inventory Button Edit -->
+                    <div class="col-lg-2 col-md-2 col-sm-2 form-group">
+                        <a class="btn btn-default btn-sm" ng-click="addInventoryEdit()" style="margin-top: 25px;">
+                            + Add Inventory
+                        </a>
+                    </div>
+                    <!--Fieldset Edit-->
+                    <div class="col-lg-12 col-md-12 form-group">
+                        <fieldset data-ng-repeat="choiceEdit in choicesEdit">
+                            <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                                <label>Select Inventory</label>
+                                <select class="form-control input-sm" ng-model="choiceEdit.inventoryEdit"
+                                        ng-options="inventory_SA.inventory_id as inventory_SA.inventory_name for inventory_SA in inventoryList_SA">
+                                    <option style="display:none;" value="">Select Inventory</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                                <label>Quantity</label>
+                                <input type="text" ng-model="choiceEdit.quantityEdit" class="form-control input-sm"
+                                       placeholder="Enter Quantity" valid-number ng-required="true"/>
+                            </div>
+                            <div class="col-lg-2 col-md-2 col-sm-2 form-group">
+                                <button class="btn btn-danger btn-sm remove" ng-show="$last"
+                                        ng-click="removeInventoryEdit()" style="margin-top: 25px;">
+                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="col-lg-12 col-md-12 form-group">
+                        <button class="btn btn-default" ng-click="updateItem_SA()" ng-disabled="editItemsForm.$invalid">
+                            Update
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="widget">
+            <div class="table-area">
+                <div class="col-lg-12 col-md-12 col-sm-12"
+                     style="background: #F7F7F7; padding: 11px 13px 7px 16px; border-radius: 5px;">
+                    <div class="col-lg-6 col-md-6 col-sm-12">
+                        <div class="col-lg-4">
+                            <h6>Select Location</h6>
+                        </div>
+                        <div class="col-lg-8">
+                            <select class="form-control text-capitalize input-sm"
+                                    ng-model="locationList_SA.branch_id"
+                                    ng-options="locationList_SA.branch_id as locationList_SA.location_name for locationList_SA in lL_SA"
+                                    ng-change="getCategoryList_manageItems_SA(); getInventoryList_SA();">
+                                <option style="display:none" value="">Select Location</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-12">
+                        <div class="col-lg-4">
+                            <h6>Select Category</h6>
+                        </div>
+                        <div class="col-lg-8">
+                            <select class="form-control input-sm" ng-model="categoryList_SA.category_id"
+                                    ng-options="categoryList_SA.category_id as categoryList_SA.category_name for categoryList_SA in cL_SA"
+                                    ng-change="getItemList_manageItems_SA(categoryList_SA.category_id)">
+                                <option style="display:none" value="">Select Category</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="widget-title">
+                    <table class="table table-bordered table-responsive table-stripped"
+                           style="font-size:12px; width: 100%;" cellspacing="0" datatable="ng">
+                        <thead>
+                        <tr>
+                            <th>ITEM NAME</th>
+                            <th class="text-center">PRICE</th>
+                            <th class="text-center">STATUS</th>
+                            <th class="text-center">ACTION</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="item_SA in iL_SA">
+                            <td class="text-capitalize">
+                                <span ng-hide="itemName == item_SA.item_id">{{item_SA.item_name}}</span>
+                                <!--<input type="text" ng-model="item_SA.item_name"
+                                       ng-show="selectedItemName == item_SA.item_id"
+                                       class="form-control input-sm" />-->
+                            </td>
+                            <td class="text-capitalize text-center">
+                                <span ng-hide="itemPrice == item_SA.item_id">{{item_SA.item_price}}</span>
+                                <!--<input type="text" ng-model="item_SA.item_price"
+                                       ng-show="selectedItemPrice == item_SA.item_id"
+                                       class="form-control input-sm" style="width: 62px;"/>-->
+                            </td>
+                            <td class="text-capitalize text-center">
+                                <span ng-hide="itemStatus == item_SA.item_id">{{item_SA.item_status}}</span>
+                                <!--<select ng-model="item_SA.item_status" ng-selected="item_SA.item_status"
+                                        ng-show="selectedItemStatus == item_SA.item_id"
+                                        class="form-control input-sm">
+                                    <option value="active">Active</option>
+                                    <option value="inactive">Inactive</option>
+                                </select>-->
+                            </td>
+                            <td class="text-center">
+                                <button ng-click="editItemDetail_SA(item_SA.item_id); getInventoryList_SA()"
+                                        class="form-control btn-sm">
+                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+
+
+<div ng-show="admin_role_id == 2">
+    <div class="heading-sec">
+        <div class="row">
+            <div class="col-md-4 column">
+                <div class="heading-profile">
+                    <h2>Manage Items</h2>
+                </div>
+            </div>
+            <div class="col-md-8 column">
+                <div class="top-bar-chart">
+                    <div class="quick-report">
+                        <div class="quick-report-infos">
+                            <h5 style="cursor: pointer" ng-click="add_item_A()">
+                                + Add New Item
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel-content">
+        <div class="row">
+            <div class="widget animate-show animate-hide" ng-show="animate">
+                <div class="step-form-sec">
+                    <form ng-submit="addItems_A()" name="addItemsForm_A">
+                        <div class="col-lg-12 form-group">
+                            <h5>Add New Item</h5>
+                        </div>
+                        <div class="col-lg-12 form-group">
+                            <span ng-show="itemExistError_A" style="color:#FA787E;">Item Already Exist</span>
+                            <span ng-show="inventoryItemErrorMsg_A" style="color:#FA787E;">Add atleast one inventory item</span>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                            <label>Select Category</label>
+                            <select class="form-control input-sm" ng-model="categoryList_A.category_id"
+                                    ng-options="categoryList_A.category_id as categoryList_A.category_name for categoryList_A in cL_A"
+                                    ng-change="getItemList_manageItems_A()">
+                                <option style="display:none" value="">Select Category</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                            <label>Item Name</label>
+                            <input type="text" class="form-control text-capitalize" ng-model="item_A.item_name"
+                                   placeholder="Item Name"
+                                   ng-required="true"/>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                            <div class="col-lg-6">
+                                <label>Item Price</label>
+                                <input type="text" class="form-control" ng-model="item_A.item_price"
+                                       placeholder="Item Price"
+                                       ng-required="itemRequired_A" ng-disabled="itemPrice_disabled_A" valid-number/>
+                            </div>
+                            <div class="col-lg-6">
+                                <br/>
+                                <label>MRP</label>&nbsp;
+                                <input type="checkbox" class="btn btn-default" ng-model="item_A.checked"
+                                       ng-checked="false" ng-click="hidePriceOpt_A()"/>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                            <label>Select Status</label>
+                            <select class="form-control" ng-model="item_A.status" ng-required="true">
+                                <option style="display:none" value="">Select Status</option>
+                                <option ng-value="1">Active</option>
+                                <option ng-value="0">Inactive</option>
+                            </select>
+                        </div>
+
+
+                        <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                            <a class="btn btn-default btn-sm" ng-click="addInventory_A()" style="margin-top: 25px;">+
+                                Add Inventory</a>
+                        </div>
+                        <div class="row">&nbsp;</div>
+                        <fieldset data-ng-repeat="choice_A in choices_A">
+                            <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                                <label>Select Inventory</label>
+                                <select class="form-control input-sm" ng-model="choice_A.inventory"
+                                        ng-options="inventory_A.inventory_name as inventory_A.inventory_name for inventory_A in inventoryList_A">
+                                    <option style="display:none" value="">Select Inventory</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                                <label>Quantity</label>
+                                <input type="text" ng-model="choice_A.quantity" class="form-control input-sm"
+                                       placeholder="Enter Quantity" valid-number ng-required="true"/>
+                            </div>
+                            <div class="col-lg-2 col-md-2 col-sm-2 form-group">
+                                <label>Measurement</label>
+                                <input type="text" ng-model="choice_A.measurement" class="form-control input-sm"
+                                       placeholder="kg, lt, gm..." ng-required="true"/>
+                            </div>
+                            <div class="col-lg-2 col-md-2 col-sm-2 form-group">
+                                <button class="btn btn-danger btn-sm remove" ng-show="$last"
+                                        ng-click="removeInventory_A()" style="margin-top: 25px;">
+                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        </fieldset>
+
+                        <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                            <button class="btn btn-default" style="margin-top:23px"
+                                    ng-disabled="addItemsForm_A.$invalid">Add
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="panel-content">
+        <div class="row">
+            <div class="widget">
+                <div class="table-area">
+                    <div class="col-lg-12 col-md-12 col-sm-12"
+                         style="background: #F7F7F7; padding: 11px 13px 7px 16px; border-radius: 5px;">
+                        <div class="col-lg-8">
+                            <h6>SELECT CATEGORY</h6>
+                        </div>
+                        <div class="col-lg-4">
+                            <select class="form-control input-sm" ng-model="categoryList_A.category_id"
+                                    ng-options="categoryList_A.category_id as categoryList_A.category_name for categoryList_A in cL_A"
+                                    ng-change="getItemList_manageItems_A()">
+                                <option style="display:none" value="">Select Category</option>
+                            </select>
+                        </div>
+
+                    </div>
+                    <div class="widget-title">
+                        <table class="table table-bordered table-responsive table-stripped"
+                               style="font-size:12px; width: 100%;" cellspacing="0" datatable="ng">
+                            <thead>
+                            <tr>
+                                <th>ITEM NAME</th>
+                                <th class="text-center">PRICE</th>
+                                <th class="text-center">STATUS</th>
+                                <th class="text-center">ACTION</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="item_A in iL_A">
+                                <td class="text-capitalize">
+                                    <span ng-hide="itemName_A == item_A.item_id">{{item_A.item_name}}</span>
+                                    <input type="text" ng-model="item_A.item_name"
+                                           ng-show="selectedItemName_A == item_A.item_id"
+                                           class="form-control input-sm"/>
+                                </td>
+                                <td class="text-capitalize text-center">
+                                    <span ng-hide="itemPrice_A == item_A.item_id">{{item_A.item_price}}</span>
+                                    <input type="text" ng-model="item_A.item_price"
+                                           ng-show="selectedItemPrice_A == item_A.item_id"
+                                           class="form-control input-sm" style="width: 62px;"/>
+                                </td>
+                                <td class="text-capitalize text-center">
+                                    <span ng-hide="itemStatus_A == item_A.item_id">{{item_A.status}}</span>
+                                    <select ng-model="item_A.status" ng-selected="item_A.status"
+                                            ng-show="selectedItemStatus_A == item_A.item_id"
+                                            class="form-control input-sm">
+                                        <option value="active">Active</option>
+                                        <option value="inactive">Inactive</option>
+                                    </select>
+                                </td>
+                                <td class="text-center">
+                                    <button ng-click="editItem_A(item_A.item_id)" class="form-control btn-sm"
+                                            ng-hide="editBtn_A == item_A.item_id">
+                                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                    </button>
+                                    <button ng-click="updateItem_A(item_A)" class="form-control btn-sm"
+                                            ng-show="saveBtn_A == item_A.item_id">
+                                        <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                                    </button>
+                                    <button ng-show="cancelBtn_A == item_A.item_id" class="form-control btn-xs"
+                                            ng-click="cancelItem_A()">
+                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

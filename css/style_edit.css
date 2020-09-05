@@ -1,0 +1,19 @@
+.modal{
+    top: 40px!important;
+}
+
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    padding: 0!important;
+}
+
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    padding: .3em .8em;
+    background: none!important;
+    border: 1px solid transparent;
+}
+
+div.dataTables_wrapper div.dataTables_filter input{
+    height: 20px!important;
+}

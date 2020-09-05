@@ -1,0 +1,186 @@
+<style>
+    /*.ng-invalid.ng-touched {
+        border-color: red !important;
+    }*/
+
+    #errorEmail_id, #errorPassword {
+        font-size: 11px;
+        position: absolute;
+        height: 24px;
+        color: #fff;
+        background: rgba(171, 0, 0, 0.42);
+        padding: 4px 10px 9px;
+        border-radius: 12px;
+        top: 0px;
+        left: 128px;
+    }
+
+    #addVendorEmailExistError_SA, #addVendorMobileExistError_SA, #editVendorEmailExistError_SA, #editVendorMobileExistError_SA {
+        font-size: 12px;
+        color: red;
+    }
+</style>
+
+<span ng-if="pageLoader">
+    <div class="loading"></div>
+</span>
+
+<div ng-show="admin_role_id == 1">
+    <div class="heading-sec">
+        <div class="row">
+            <div class="col-md-4 column">
+                <div class="heading-profile">
+                    <h2>MANAGE VENDOR</h2>
+                </div>
+            </div>
+            <div class="col-md-8 column">
+                <div class="top-bar-chart">
+                    <div class="quick-report">
+                        <div class="quick-report-infos">
+                            <h5 style="cursor: pointer" ng-click="add_vendor_SA()" ng-show="addVendorOpt_SA">
+                                + Add New Vendor
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="widget  animate-show animate-hide" ng-show="animate">
+        <div class="step-form-sec">
+            <form name="addVendorForm" ng-submit="addNewVendor_SA()">
+                <div class="col-lg-12 form-group">
+                    <h5>Add New Vendor</h5>
+                    <span ng-show="addVendorEmailExistError_SA" id="addVendorEmailExistError_SA">Email-Id Already Exist</span>
+                    <span ng-show="addVendorMobileExistError_SA" id="addVendorMobileExistError_SA">Mobile Number Already Exist</span>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                    <label>Vendor Name</label>
+                    <input type="text" class="form-control text-capitalize" ng-model="vendor.vendor_name"
+                           placeholder="Vendor Name" ng-pattern="/^[a-zA-Z\s]*$/" ng-required="true"/>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                    <label>Contact Person Name</label>
+                    <input type="text" class="form-control" ng-model="vendor.full_name" placeholder="Full Name"
+                           ng-pattern="/^[a-zA-Z\s]*$/" ng-required="true"/>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                    <label>Email Id</label>
+                    <span id="errorEmail_id"
+                          ng-show="addVendorForm.email_id.$invalid && addVendorForm.email_id.$touched">Enter valid email</span>
+                    <input type="text" class="form-control" ng-model="vendor.email_id" name="email_id"
+                           placeholder="Email Id"
+                           ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/" ng-required="true"/>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                    <label>Mobile Number</label>
+                    <input type="text" class="form-control" ng-model="vendor.mobile_number" placeholder="Mobile Number"
+                           ng-required="true" ng-maxlength="10" ng-minlength="10" valid-number/>
+                </div>
+                <div class="col-lg-8 col-md-8 col-sm-8 form-group">
+                    <label>Address</label>
+                    <input type="text" class="form-control" ng-model="vendor.address" placeholder="Address"
+                           ng-required="true" />
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                    <button class="btn btn-default" style="margin-top:23px" ng-disabled="addVendorForm.$invalid">
+                        Add
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <!--Edit Vendor-->
+    <div class="widget" ng-show="editPanel_SA">
+        <div class="step-form-sec">
+            <form name="editVendorForm" ng-submit="updateVendor_SA()">
+                <div class="col-lg-12 form-group">
+                    <h5>Update Vendor</h5>
+                    <span ng-show="editVendorEmailExistError_SA" id="editVendorEmailExistError_SA">Email-Id Already Exist</span>
+                    <span ng-show="editVendorMobileExistError_SA" id="editVendorMobileExistError_SA">Mobile Number Already Exist</span>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                    <label>Vendor Name</label>
+                    <input type="text" class="form-control text-capitalize" ng-model="editVendor.vendor_name"
+                           placeholder="Edit Vendor Name" ng-pattern="/^[a-zA-Z\s]*$/" ng-required="true"/>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                    <label>Contact Person Name</label>
+                    <input type="text" class="form-control" ng-model="editVendor.full_name" placeholder="Edit Full Name"
+                           ng-pattern="/^[a-zA-Z\s]*$/" ng-required="true"/>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                    <label>Email Id</label>
+                    <span id="editErrorEmail_id"
+                          ng-show="editVendorForm.email_id.$invalid && editVendorForm.email_id.$touched">Enter valid email</span>
+                    <input type="text" class="form-control" ng-model="editVendor.email_id" name="email_id"
+                           placeholder="Edit Email Id"
+                           ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/" ng-required="true"/>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                    <label>Mobile Number</label>
+                    <input type="text" class="form-control" ng-model="editVendor.mobile_number" placeholder="Edit Mobile Number"
+                           ng-required="true" ng-maxlength="10" ng-minlength="10" valid-number />
+                </div>
+                <div class="col-lg-8 col-md-8 col-sm-8 form-group">
+                    <label>Address</label>
+                    <input type="text" class="form-control" ng-model="editVendor.address" placeholder="Address"
+                           ng-required="true" />
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                    <button class="btn btn-default" style="margin-top:23px" ng-disabled="editVendorForm.$invalid">
+                        Update
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="panel-content">
+        <div class="row" ng-show="vendorList">
+            <div class="widget">
+                <div class="table-area">
+                    <div class="widget-title">
+                        <table class="table table-bordered table-responsive table-stripped"
+                               style="font-size:12px; width: 100%;" cellspacing="0" datatable="ng">
+                            <thead>
+                            <tr>
+                                <th>VENDOR NAME</th>
+                                <th>CONTACT PERSON</th>
+                                <th class="text-center">EMAIL</th>
+                                <th class="text-center">MOBILE</th>
+                                <th class="text-center">ACTION</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="vendor_SA in vL_SA">
+                                <td class="text-capitalize">
+                                    <span>{{vendor_SA.vendor_name}}</span>
+                                </td>
+                                <td class="text-capitalize">
+                                    <span>{{vendor_SA.full_name}}</span>
+                                </td>
+                                <td class="text-center">
+                                    <span>{{vendor_SA.email_id}}</span>
+                                </td>
+                                <td class="text-capitalize text-center">
+                                    <span>{{vendor_SA.mobile_number}}</span>
+                                </td>
+                                <td class="text-center">
+                                    <button ng-click="editVendor_SA(vendor_SA)" class="form-control btn-sm">
+                                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

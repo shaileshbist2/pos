@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html ng-app="mainApp" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <base href="/dexpos/">
+    <title>dexPOS - Android based POS System for Small Businesses</title>
+    <link rel="icon" href="https://www.dexconsulting.com/dexpos/images/dex_favicon.png" type="image/png">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
+    <link rel="stylesheet" href="css/icons.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/ng-animate.css">
+    <link rel="stylesheet" href="css/style_edit.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/image-crop-styles.css">
+    <link rel="stylesheet" href="css/overlay_loader.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.11/css/dataTables.bootstrap.min.css">
+    <link rel="stylesheet" href="script/responsive.bootstrap.min.css">
+    <link rel="stylesheet" href="script/angular-datatables.min.css">
+    <link rel="stylesheet" href="script/ng-img-crop.css"/>
+    <link rel="stylesheet" type="text/css" media="all" href="date_range_picker/daterangepicker.css"/>
+    <style>
+        #view_loading {
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            position: fixed;
+            display: block;
+            opacity: 0.7;
+            background-color: #fff;
+            z-index: 99;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div ng-controller="indexCtrl">
+
+    <div id="view_loading">
+        <h2 style="color:#000; z-index: 999999">
+            Loading...
+        </h2>
+    </div>
+
+    <div data-ng-include='"app/header/header.html"'></div>
+    <div class="main-content" data-ng-view></div>
+    <div data-ng-include='"app/footer/footer.html"'></div>
+
+</div>
+
+<script src="js/jquery-2.1.3.js"></script>
+<!--<script src="http://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places" type="text/javascript"></script>-->
+<script src="js/bootstrap.min.js"></script>
+<script src="script/angular-1.5.7/angular.min.js"></script>
+<script src="script/angular-1.5.7/angular-route.min.js"></script>
+<script src="script/angular-1.5.7/angular-animate.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js"></script>
+<!--<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-messages.min.js"></script>-->
+<script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.js"></script>
+
+<script src="script/angular-1.5.7/angular-cookies.min.js"></script>
+<script src="script/angular-local-storage.min.js"></script>
+<script src="script/ui-bootstrap-tpls-2.0.0.min.js"></script>
+<script src="script/croppie-master/croppie.js"></script>
+<!--<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBunU3TNtrQtWM2z7mpLUQMqPHE5vDURUs&sensor=false&amp;libraries=places"></script>-->
+
+<script src="app/app.route.js"></script>
+<script src="app/indexCtrl.js"></script>
+<script src="app/app.common.service.js"></script>
+<script src="app/app.module.js"></script>
+<script src="app/app.proxy.js"></script>
+<script src="app/app.resource.js"></script>
+
+<script src="app/login/loginCtrl.js"></script>
+<script src="app/register/registerCtrl.js"></script>
+<script src="app/register/register_2Ctrl.js"></script>
+<script src="app/forgotPassword/forgotPasswordCtrl.js"></script>
+<script src="app/forgotPassword/resetPasswordCtrl.js"></script>
+<script src="app/dashboard/dashboardCtrl.js"></script>
+<script src="app/manageLocation/manageLocationCtrl.js"></script>
+<script src="app/manageCategories/manageCategoriesCtrl.js"></script>
+<script src="app/manageItems/manageItemsCtrl.js"></script>
+<script src="app/allotInventory/allotInventoryCtrl.js"></script>
+<script src="app/manageInventory/manageInventoryCtrl.js"></script>
+<script src="app/manageOrders/manageOrdersCtrl.js"></script>
+<script src="app/manageUsers/manageUsersCtrl.js"></script>
+<script src="app/manageVendor/manageVendorCtrl.js"></script>
+<script src="app/manageOffer/manageOfferCtrl.js"></script>
+<script src="app/inventoryCategory/inventoryCategoryCtrl.js"></script>
+<script src="app/inventoryItem/inventoryItemCtrl.js"></script>
+<script src="app/companyProfile/companyProfileCtrl.js"></script>
+<script src="app/setting/settingCtrl.js"></script>
+<script type="text/javascript" src="app/modalwindow/modaltemplate.js"></script>
+
+
+<script src="script/image-crop.js"></script>
+<script src="js/app.js"></script>
+<script src="js/main.js"></script>
+<script src="js/common.js"></script>
+<script src="script/jquery.dataTables.min.js"></script>
+<script src="script/dataTables.bootstrap.min.js"></script>
+<script src="script/dataTables.responsive.min.js"></script>
+<script src="script/responsive.bootstrap.min.js"></script>
+<script type="text/javascript" src="script/angular-datatables.min.js "></script>
+<script src="script/ng-img-crop.js"></script>
+<script type="text/javascript" src="date_range_picker/moment.js"></script>
+<script type="text/javascript" src="date_range_picker/daterangepicker.js"></script>
+<script language="javascript" type="text/javascript">
+    $(window).load(function () {
+        $('#view_loading').fadeOut(1000);
+    });
+</script>
+</body>
+</html>

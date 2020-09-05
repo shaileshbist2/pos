@@ -1,0 +1,236 @@
+<style>
+    .ng-invalid.ng-touched {
+        border-color: red !important;
+    }
+
+    .ng-invalid .addDetailsButton {
+        background: grey !important;
+    }
+
+
+
+    #errorCompanyName, #errorLocation, #errorCompanyNickName, #errorTax {
+        font-size: 11px;
+        position: absolute;
+        height: 24px;
+        color: #fff;
+        background: #FA787E;
+        padding: 4px 10px 9px;
+        border-radius: 12px;
+        top: -16px;
+    }
+
+    .cancelBtn{
+        background: #f63500;
+        border: #f63500;
+        color: #fff;
+        border-radius: 22px;
+        padding: 14px;
+        font-size: 12px;
+        width: 183px;
+        height: 44px;
+    }
+</style>
+<style>
+    .cropArea {
+        background: #fff;
+        overflow: hidden;
+        width: 266px;
+        height: 183px;
+        border-radius: 5px;
+    }
+
+    #imgCrp canvas {
+        margin-top: -83px !important;
+        margin-left: -126px !important;
+        cursor: default !important;
+    }
+</style>
+<!--------IMAGE UPLOAD CSS --------------->
+<style>
+    .cancelRegistrationBtn{
+        top:12px;
+    }
+    .addDetailsButton{
+        margin-top: 7px!important;
+        border-radius: 25px;
+        height: 45px;
+        width: 183px;
+        font-size: 12px;
+        background: #f63500;
+        border: #f63500;
+        color: #fff;
+        padding: 12px;
+    }
+    button:hover{
+        color: #fff!important;
+    }
+    .fileContainer {
+        overflow: hidden;
+        position: relative;
+    }
+
+    .fileContainer [type=file] {
+        cursor: inherit;
+        display: block;
+        font-size: 9px;
+        filter: alpha(opacity=0);
+        min-height: 100%;
+        min-width: 100%;
+        opacity: 0;
+        position: absolute;
+        right: 0;
+        text-align: right;
+        top: 0;
+    }
+
+    /* Example stylistic flourishes */
+
+    .fileContainer {
+        background: #f63500;
+        color: #fff;
+        border-radius: 5px;
+        float: left;
+        padding-top: 10px;
+        padding-left: 25px;
+        height:45px;
+        border-radius: 25px;
+    }
+
+    .fileContainer [type=file] {
+        cursor: pointer;
+        margin-top: 12px;
+    }
+</style>
+
+
+<div class="account-user-sec registration-sec">
+    <div class="account-sec">
+        <div class="account-top-bar">
+            <div class="container">
+                <div class="logo">
+                    <a href="#/" title="">
+                        <img src="{{webPath}}images/dexposLogo.png" height="40" width="140"/>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="acount-sec">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 col-lg-12 col-sm-12">
+                        <div class="contact-sec">
+                            <div class="row">
+                                <div class="col-md-8 col-lg-8 col-sm-8">
+                                    <div class="widget-title">
+                                        <h3>Please provide us following details to finish your registration.</h3>
+                                        <span>Fill your detail to get in</span>
+
+                                    </div><!-- Widget title -->
+                                    <span style="font-size: 12px; color:#FA787E;" ng-if="errorImageMsg == 1">Please Upload The Logo</span>
+                                    <div class="account-form">
+                                        <form name="addDetailsForm" ng-submit="addRegisterDetails()">
+                                            <div class="row">
+                                                <div class="col-md-6 col-lg-6 col-sm-6 feild">
+                                                    <span ng-show="addDetailsForm.companyName.$invalid && addDetailsForm.companyName.$touched"
+                                                          id="errorCompanyName">
+                                                        Please enter company name
+                                                    </span>
+                                                    <h6>Company Name</h6>
+                                                    <input type="text" ng-model="user.companyName" name="companyName"
+                                                           placeholder="Company Name" ng-required="true"
+                                                           class="text-capitalize"/>
+                                                </div>
+                                                <div class="col-md-6 col-lg-6 col-sm-6 feild">
+                                                    <span ng-show="addDetailsForm.companyNickName.$invalid && addDetailsForm.companyNickName.$touched"
+                                                          id="errorCompanyNickName">
+                                                        Please enter company nick name, TN,DX,DO..
+                                                    </span>
+                                                    <h6>Nick Name [This will be used in your invoice number]</h6>
+                                                    <input type="text" ng-model="user.companyNickName" name="companyNickName"
+                                                           placeholder="Company Nick Name eg: DN, DX, TN .." ng-required="true"
+                                                           class="text-uppercase"/>
+                                                </div>
+                                                <!--<div class="col-md-6 feild">
+                                                    <span ng-show="addDetailsForm.companyLocation.$invalid && addDetailsForm.companyLocation.$touched"
+                                                          id="errorLocation">
+                                                        Please enter location
+                                                    </span>
+                                                    <input type="text" ng-model="user.companyLocation"
+                                                           name="companyLocation" placeholder="Location Name"
+                                                           ng-required="true"/>
+                                                </div>-->
+                                                <div class="row">&nbsp;</div>
+                                                <div class="col-md-6 col-lg-6 col-sm-6 feild">
+                                                    <span ng-show="addDetailsForm.companyTax.$invalid && addDetailsForm.companyTax.$touched"
+                                                          id="errorTax">
+                                                        Please enter valid Tax/VAT value
+                                                    </span>
+                                                    <h6>GST/TAX/VAT</h6>
+                                                    <input type="text" ng-model="user.companyTax"
+                                                           name="companyTax" placeholder="TAX/VAT/GST"
+                                                           ng-required="true" valid-number ng-maxlength="5" />
+                                                </div>
+                                                <div class="col-md-6 col-lg-6 col-sm-6 feild">
+                                                    <h6>Upload Your Company Logo</h6>
+                                                    <label class="fileContainer">
+                                                        <i class="fa fa-plus" aria-hidden="true"></i>
+                                                        Click to upload logo image
+                                                        <input type="file" id="fileInput" />
+                                                    </label>
+                                                </div>
+                                                <div class="row">&nbsp;</div>
+                                                <div class="feild col-md-3">
+                                                    <!--<input type="submit" value="Go To Dashboard"
+                                                           ng-disabled="addDetailsForm.$invalid"
+                                                           class="addDetailsButton"/>-->
+                                                    <button class="btn btn-lg addDetailsButton" ng-disabled="addDetailsForm.$invalid">
+                                                        Go To Dashboard
+                                                        <i class="fa fa-circle-o-notch fa-spin fa-1x fa-fw" ng-show="addDetailSpinner"></i>
+                                                    </button>
+                                                </div>
+                                                <div class="row">&nbsp;</div>
+                                                <div class="row">&nbsp;</div>
+                                                <div class="col-md-8 feild">
+                                                    <button class="btn cancelBtn" ng-if="cancelConf" ng-click="cancelConfBtn()">
+                                                        Cancel Registration
+                                                    </button>
+                                                <span ng-if="confirmation == 1"
+                                                      style="top: 36px; left:1px; position: relative; border-radius: 22px; padding: 10px;">
+                                                    Sure want to delete your registered data ? &nbsp;
+                                                    <a ng-click="deleteRegisterData()"
+                                                       class="btn btn-danger btn-xs">
+                                                        Yes
+                                                        <i class="fa fa-circle-o-notch fa-spin fa-1x fa-fw" ng-show="cancelRegistrationSpinner"></i>
+                                                    </a> &nbsp;
+                                                    <a ng-click="cancelConfirmation()"
+                                                       class="btn btn-primary btn-xs">No</a>
+                                                </span>
+                                                </div>
+                                            </div>
+                                        </form>
+                                        <!--<div><img ng-src="{{myCroppedImage}}"/></div>-->
+                                    </div>
+                                    <div class="more-option">
+                                        <span>LOGO</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="creat-an-account">
+                                        <div class="feild col-md-6">
+                                            <div class="cropArea">
+                                                <img-crop image="myImage" result-image="myCroppedImage" id="imgCrp"></img-crop>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Account Sec -->
+</div>
+

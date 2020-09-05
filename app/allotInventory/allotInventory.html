@@ -1,0 +1,188 @@
+<!--<div id="progressBar"></div>-->
+
+<span ng-if="pageLoader">
+    <div class="loading"></div>
+</span>
+
+
+<div ng-show="admin_role_id == 1">
+    <div class="heading-sec">
+        <div class="row">
+            <div class="col-md-4 column">
+                <div class="heading-profile">
+                    <h2>OUTLET TRANSFER ITEM</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel-content">
+        <div class="row">
+            <div ng-if="screenMode==0" class="widget">
+                <div class="table-area">
+                    <div class="col-lg-12 col-md-12 col-sm-12"
+                         style="background: #F7F7F7; overflow: hidden; padding: 11px 13px 7px 16px; border-radius: 5px;">
+                        <div class="col-md-3 col-sm-6 col-xs-12">
+                            <select class="form-control text-capitalize input-sm"
+                                    ng-model="newAllotment.branch_id"
+                                    ng-options="locationList_SA.branch_id as locationList_SA.location_name for locationList_SA in IL_SA"
+                                    ng-change="getItemList_allotInventory_SA()">
+                                <option style="display:none" value="">Select Location</option>
+                            </select>
+                        </div>
+                        <div class="col-md-9 col-sm-6 col-xs-12 text-right">
+                            <span ng-click="allot_inventory_SA()"><strong><i
+                                    class="fa fa-plus"></i> Allot Inventory</strong></span>
+                        </div>
+                    </div>
+                    <div class="animate-show animate-hide" ng-show="animate">
+                        <br><br><br>
+                        <form ng-submit="addInventoryItemTo_branch()" name="addInventoryToBranchForm">
+                            <div class="form-group">
+                                <span ng-show="inventoryItem_error"
+                                      style="color:#FA787E;">Please add at least one item</span>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label>Inventory Item</label>
+                                        <select ng-model="newAllotment.inventory_id"
+                                                ng-options="choice_SA.inventory_id as choice_SA.inventory_name for choice_SA in iL_SA"
+                                                class="form-control text-capitalize" ng-required="true">
+                                            <option style="display:none" value="">Select Inventory Item</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label>Quantity</label>
+                                        <input type="text" ng-model="newAllotment.quantity" class="form-control"
+                                               placeholder="Enter Quantity" valid-number ng-required="true">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <button class="btn btn-success" ng-disabled="addInventoryToBranchForm.$invalid">
+                                    Add Item
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    <hr>
+                    <br>
+                    <div class="widget-title">
+                        <table class="table table-bordered table-responsive table-stripped"
+                               style="font-size:12px; width: 100%;" cellspacing="0" datatable="ng">
+                            <thead>
+                            <tr>
+                                <th>INVENTORY ITEM NAME</th>
+                                <th class="text-center">QUANTITY</th>
+                                <th class="text-center">ACTION</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="item in stock | orderBy:'inventoryName'">
+                                <td width="60%" class="text-capitalize">
+                                    {{item.inventoryName}}
+                                </td>
+                                <td width="10%" class="text-center">
+                                    {{item.quantity}}
+                                </td>
+                                <td width="30%" class="text-center">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-primary btn-sm"
+                                                ng-click="getInventoryAllotmentHistory(item)">Allotment History
+                                        </button>
+                                        <button type="button" class="btn btn-primary btn-sm">Usages History</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div ng-show="screenMode==1" class="widget">
+                <div class="task-managment">
+                    <div class="widget-title">
+                        <div class="col-lg-12"
+                             style="background: #F7F7F7; padding: 11px 13px 7px 16px; border-radius: 5px;">
+                            <div class="col-lg-2 col-md-2 col-sm-2">
+                                <h6>SELECT DATE RANGE</h6>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-3" id="calender">
+                                <input type="text" class="form-control input-sm selectCalender" valid-number>
+                            </div>
+                            <button class="btn btn-sm btn-primary pull-right" ng-click="back();"><i
+                                    class="fa fa-arrow-left"></i>&nbsp; Back
+                            </button>
+                        </div>
+
+                    </div>
+                    <div class="col-md-6" style="border-right: 1px solid lightgray">
+                        <h4>Allotment</h4>
+                        <table class="table table-bordered table-responsive table-stripped"
+                               style="font-size:12px; width: 100%;" cellspacing="0" datatable="ng">
+                            <thead>
+                            <tr>
+                                <th>DATE</th>
+                                <th>ITEM NAME</th>
+                                <th class="text-center">QUANTITY</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="allotment in allotmentHistory | orderBy:'-createdDate'">
+                                <td style="width: 20%">
+                                    <strong>{{allotment.createdDate | date:"yyyy-MM-dd 'at' h:mma"}}</strong>
+                                </td>
+                                <td style="width: 65%;" class="text-capitalize">
+                                    {{allotment.inventoryName}}
+                                </td>
+                                <td class="text-center">
+                                    {{allotment.quantity}} {{allotment.measurement}}
+                                </td>
+                            </tr>
+                            </tbody>
+                            <tfoot ng-if="allotmentHistory.length > 0">
+                            <tr>
+                                <th colspan="2">TOTAL ALLOTMENT</th>
+                                <th class="text-center">{{totalAllotment}}</th>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <div class="col-md-6">
+                        <h4>Wastage</h4>
+                        <table class="table table-bordered table-responsive table-stripped"
+                               style="font-size:12px; width: 100%;" cellspacing="0" datatable="ng">
+                            <thead>
+                            <tr>
+                                <th>DATE</th>
+                                <th>ITEM NAME</th>
+                                <th class="text-center">QUANTITY</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="waste in wastageHistory | orderBy:'-createdDate'">
+                                <td style="width: 20%">
+                                    <strong>{{waste.createdDate | date:"yyyy-MM-dd 'at' h:mma"}}</strong>
+                                </td>
+                                <td style="width: 65%;" class="text-capitalize">
+                                    {{waste.inventoryName}}
+                                </td>
+                                <td class="text-center">
+                                    {{waste.quantity}} {{waste.measurement}}
+                                </td>
+                            </tr>
+                            </tbody>
+                            <tfoot ng-if="wastageHistory.length > 0">
+                            <tr>
+                                <th colspan="2">TOTAL WASTE</th>
+                                <th class="text-center">{{totalWastage}}</th>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

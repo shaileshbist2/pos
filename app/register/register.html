@@ -1,0 +1,188 @@
+<style>
+    .anchorColor a {
+        color: #ffffff;
+    }
+
+    .anchorColor a:hover {
+        color: #f63500;
+    }
+
+    .ng-invalid.ng-touched {
+        border-color: red !important;
+    }
+
+    .ng-invalid .registerButton {
+        background: grey !important;,
+    }
+
+    .registerButton {
+        border-radius: 25px;
+        height: 45px;
+        width: 150px;
+        padding: 12px;
+        background: #f63500;
+        border: #f63500;
+        color: #fff;
+    }
+
+    button:hover {
+        color: #fff !important;
+    }
+
+    #errorFirstName, #errorLastName, #errorCompanyEmail, #errorMobileNumber, #errorCompanyPassword, #errorCompanyReEnterPassword {
+        font-size: 11px;
+        position: absolute;
+        height: 24px;
+        color: #fff;
+        background: #FA787E;
+        padding: 4px 10px 9px;
+        border-radius: 12px;
+        top: -16px;
+    }
+
+    #errorEmailMsgStyle, #errorMobileMsgStyle, #errorPasswordMsgStyle {
+        font-size: 15px;
+        color: #ee6666;
+        padding: 10px;
+        position: relative;
+        top: -10px;
+    }
+</style>
+
+<div class="account-user-sec registration-sec">
+    <div class="account-sec">
+        <div class="account-top-bar">
+            <div class="container">
+                <div class="logo">
+                    <a href="#/" title="">
+                        <img src="{{webPath}}images/dexposLogo.png" height="40" width="140"/>
+                    </a>
+                </div>
+                <ul class="account-header-link">
+                    <li><a title="" href="forgot-password">Forgot Your Password</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="acount-sec">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="contact-sec">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="widget-title">
+                                        <h3>Register Your Account</h3>
+                                        <span>Fill your detail to get in</span>
+                                    </div><!-- Widget title -->
+                                    <span id="errorEmailMsgStyle"
+                                          ng-show="errorEmailSignupMsg">Email id already in use</span>
+                                    <span id="errorMobileMsgStyle" ng-show="errorMobileSignupMsg">Mobile number already in use</span>
+                                    <span id="errorPasswordMsgStyle" ng-show="errorPasswordSignupMsg">Password doesn't match</span>
+                                    <div class="account-form">
+                                        <form name="registerForm" ng-submit="sign_up()">
+                                            <div class="row">
+                                                <div class="col-md-6 feild">
+                                                    <span ng-show="registerForm.firstName.$invalid && registerForm.firstName.$touched"
+                                                          id="errorFirstName">
+                                                        Invalid first name
+                                                    </span>
+                                                    <input type="text" ng-model="user.first_name"
+                                                           placeholder="First Name" name="firstName"
+                                                           ng-required="true" class="text-capitalize"
+                                                           ng-pattern="/^[a-zA-Z\s]*$/"/>
+                                                </div>
+                                                <div class="col-md-6 feild">
+                                                    <span ng-show="registerForm.lastName.$invalid && registerForm.lastName.$touched"
+                                                          id="errorLastName">
+                                                        Invalid last name
+                                                    </span>
+                                                    <input type="text" ng-model="user.last_name" placeholder="Last Name"
+                                                           name="lastName" ng-required="true" class="text-capitalize"
+                                                           ng-pattern="/^[a-zA-Z\s]*$/"/>
+                                                </div>
+                                                <div class="col-md-6 feild">
+                                                    <span ng-show="registerForm.companyEmail.$invalid && registerForm.companyEmail.$touched"
+                                                          id="errorCompanyEmail">
+                                                        Please enter valid email
+                                                    </span>
+                                                    <input type="text" ng-model="user.email" placeholder="Email"
+                                                           name="companyEmail" ng-required="true"
+                                                           ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/"/>
+                                                </div>
+                                                <div class="col-md-6 feild">
+                                                    <span ng-show="registerForm.mobileNumber.$invalid && registerForm.mobileNumber.$touched"
+                                                          id="errorMobileNumber">
+                                                        Please enter valid mobile number
+                                                    </span>
+                                                    <input type="text" ng-model="user.mobile_number"
+                                                           placeholder="Phone Number" name="mobileNumber"
+                                                           ng-maxlength="10" ng-minlength="10"
+                                                           ng-required="true" valid-number/>
+                                                </div>
+                                                <div class="col-md-6 feild">
+<span ng-show="registerForm.companyPassword.$invalid && registerForm.companyPassword.$touched"
+      id="errorCompanyPassword">
+    Should be 6 characters
+</span>
+                                                    <input type="password" ng-model="user.password"
+                                                           placeholder="Password" name="companyPassword"
+                                                           ng-required="true" ng-minlength="6"/>
+                                                </div>
+                                                <div class="col-md-6 feild">
+                                                    <span ng-show="registerForm.companyRePassword.$invalid && registerForm.companyRePassword.$touched"
+                                                          id="errorCompanyReEnterPassword">
+    Should be 6 characters
+</span>
+                                                    <input type="password" ng-model="user.re_password"
+                                                           placeholder="Re-type Password" name="companyRePassword"
+                                                           ng-required="true" ng-minlength="6"/>
+                                                </div>
+                                                <div class="feild col-md-6">
+                                                    <button ng-disabled="registerForm.$invalid"
+                                                            class="btn registerButton">
+                                                        Register now
+                                                        <i class="fa fa-circle-o-notch fa-spin fa-1x fa-fw"
+                                                           ng-show="registerLoader"></i>
+                                                    </button>
+
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="more-option">
+                                        <span>OR</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="creat-an-account">
+                                        <span>Do you have an account?</span>
+                                        <a href="login" title="">Login Now</a>
+                                    </div><!-- Create an account -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4">&nbsp;</div>
+                    <div class="col-lg-8 anchorColor" style="padding: 12px;">
+                        <div class="col-lg-3" style="float:left;">&nbsp;</div>
+                        <div class="col-lg-3" style="float:left;">
+                            <a href="https://www.dexconsulting.com/terms-and-conditions" target="_blank">Terms and
+                                Conditions</a>
+                        </div>
+                        <div class="col-lg-2" style="float:left;">
+                            <a href="https://www.dexconsulting.com/privacy-policy" target="_blank">Privacy Policy</a>
+                        </div>
+                        <div class="col-lg-2" style="float:left;">
+                            <a href="https://www.dexconsulting.com/about-dex" target="_blank">About us</a>
+                        </div>
+                        <div class="col-lg-2" style="float:left;">
+                            <a href="https://www.dexconsulting.com/contact" target="_blank">Contact us</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

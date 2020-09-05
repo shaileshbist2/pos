@@ -1,0 +1,253 @@
+<style>
+    #calender i {
+        position: absolute;
+        bottom: 10px;
+        right: 24px;
+        top: auto;
+        cursor: pointer;
+    }
+</style>
+<span ng-if="pageLoader">
+    <div class="loading"></div>
+</span>
+
+<div ng-show="admin_role_id == 1">
+    <div class="heading-sec">
+        <div class="row">
+            <div class="col-md-4 column">
+                <div class="heading-profile">
+                    <h2>MANAGE ORDERS</h2>
+                </div>
+            </div>
+            <div class="col-md-8" ng-if="screenMode == 1">
+                <div class="top-bar-chart">
+                    <div class="quick-report">
+                        <div class="quick-report-infos">
+                            <button style="cursor: pointer" ng-click="backToOrderList()" class="btn btn-default btn-sm">
+                                BACK
+                            </button>
+                        </div>
+                    </div>
+                </div><!-- Top Bar Chart -->
+            </div>
+        </div>
+    </div>
+
+    <div class="panel-content">
+        <div class="row" ng-show="totalOrderSaleLocationExist">
+            <div class="col-md-4">
+                <div class="widget">
+                    <div class="widget-controls">
+                        <span class="refresh-content" ng-click=""></span>
+                    </div>
+                    <div class="mini-stats ">
+                        <span class="red-skin"><i class="fa fa-area-chart"></i></span>
+                        <p><i class="fa  fa-arrow-up up"></i> Total Orders</p>
+                        <h3>{{total_order_sale_SA.total_orders}}</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="widget">
+                    <div class="widget-controls">
+                        <span class="refresh-content" ng-click=""></span>
+                    </div>
+                    <div class="mini-stats ">
+                        <span class="sky-skin"><i class="fa fa-usd"></i></span>
+                        <p><i class="fa  fa-arrow-up up"></i> Total Sale</p>
+                        <h3>₹{{total_order_sale_SA.final_price}}</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="widget">
+                    <div class="widget-controls">
+                        <span class="refresh-content"></span>
+                    </div>
+                    <div class="mini-stats ">
+                        <span class="sky-skin"><i class="fa fa-map-marker" aria-hidden="true"></i></span>
+                        <p><i class="fa  fa-arrow-down down"></i> Location</p>
+                        <h3 class="text-capitalize">{{total_order_sale_SA.location_name}}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="widget">
+                <div class="table-area">
+                    <div class="col-lg-12" style="background: #F7F7F7; padding: 11px 13px 7px 16px; border-radius: 5px;"
+                         ng-show="selectLocationOpt">
+                        <div class="col-lg-8 col-md-8">
+                            <h6>SELECT LOCATION</h6>
+                        </div>
+                        <div class="col-lg-4">
+                            <select class="form-control input-sm text-capitalize" ng-model="locationList_SA.branch_id"
+                                    ng-options="locationList_SA.branch_id as locationList_SA.location_name for locationList_SA in lL_SA"
+                                    ng-change="getOrderList_SA(locationList_SA.branch_id, null, null)">
+                                <option style="display:none" value="">Select Location</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">&nbsp;</div>
+                    <div class="row">&nbsp;</div>
+                    <div class="col-lg-12"
+                         style="background: #F7F7F7; padding: 11px 13px 7px 16px; border-radius: 5px;" ng-show="dateRangeOptExist">
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <h6>SELECT DATE RANGE</h6>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6" id="calender">
+                            <input type="text" class="form-control input-sm selectCalender" valid-number>
+                            <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                        </div>
+                    </div>
+                    <div class="widget-title" ng-if="screenMode ==0">
+                        <table class="table table-bordered table-responsive table-stripped"
+                               style="font-size:12px; width: 100%;" cellspacing="0" datatable="ng"
+                               dt-options="dtOptions" dt-column-defs="dtColumnDefs">
+                            <thead>
+                            <tr>
+                                <th>ORDER NUMBER</th>
+                                <th>INVOICE NUMBER</th>
+                                <th>TOTAL ITEM PRICE</th>
+                                <th>VAT/GST/TAX</th>
+                                <th>FINAL PRICE</th>
+                                <th>CREATED DATE</th>
+                                <th>INFO</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="order in orders">
+                                <td class="text-capitalize">{{order.invoice_counter}}</td>
+                                <td class="text-capitalize">{{order.invoice_number}}</td>
+                                <td class="text-capitalize">₹{{order.item_price}}</td>
+                                <td class="text-capitalize">{{order.total_vat}}</td>
+                                <td class="text-capitalize">₹{{order.final_price}}</td>
+                                <td class="text-capitalize">{{order.created_date}}</td>
+                                <td>
+                                    <button ng-click="getItemList_SA(order.branch_id, order.order_id)"
+                                            class="form-control btn-sm">
+                                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="widget-title" ng-if="screenMode == 1">
+                        <table class="table table-bordered table-responsive table-stripped"
+                               style="font-size:12px; width: 100%;" cellspacing="0" datatable="ng">
+                            <thead>
+                            <tr>
+                                <th>INVOICE NUMBER</th>
+                                <th>ITEM NAME</th>
+                                <th>ITEM QUANTITY</th>
+                                <th>ITEM PRICE</th>
+                                <th>CREATED DATE</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="item in items">
+                                <td class="text-capitalize">{{item.invoice_number}}</td>
+                                <td class="text-capitalize">{{item.item_name}}</td>
+                                <td class="text-capitalize">{{item.item_quantity}}</td>
+                                <td class="text-capitalize">₹{{item.item_price}}</td>
+                                <td class="text-capitalize">{{item.created_date}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div ng-show="admin_role_id == 2">
+    <div class="heading-sec">
+        <div class="row">
+            <div class="col-md-4 column">
+                <div class="heading-profile">
+                    <h2>Manage Orders</h2>
+                </div>
+            </div>
+            <div class="col-md-8" ng-if="screenMode_A == 1">
+                <div class="top-bar-chart">
+                    <div class="quick-report">
+                        <div class="quick-report-infos">
+                            <button style="cursor: pointer" ng-click="backToOrderList_A()"
+                                    class="btn btn-default btn-sm">
+                                BACK
+                            </button>
+                        </div>
+                    </div>
+                </div><!-- Top Bar Chart -->
+            </div>
+        </div>
+    </div>
+
+    <div class="panel-content">
+        <div class="row">
+            <div class="widget">
+                <div class="table-area">
+                    <div class="widget-title" ng-if="screenMode_A == 0">
+                        <table class="table table-bordered table-responsive table-stripped"
+                               style="font-size:12px; width: 100%;" cellspacing="0" datatable="ng">
+                            <thead>
+                            <tr>
+                                <th>ORDER NUMBER</th>
+                                <th>INVOICE NUMBER</th>
+                                <th>TOTAL ITEM PRICE</th>
+                                <th>VAT/GST/TAX</th>
+                                <th>FINAL PRICE</th>
+                                <th>CREATED DATE</th>
+                                <th>INFO</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="order_A in orders_A">
+                                <td class="text-capitalize">{{order_A.invoice_counter}}</td>
+                                <td class="text-capitalize">{{order_A.invoice_number}}</td>
+                                <td class="text-capitalize">{{order_A.item_price}}</td>
+                                <td class="text-capitalize">{{order_A.total_vat}}</td>
+                                <td class="text-capitalize">{{order_A.final_price}}</td>
+                                <td class="text-capitalize">{{order_A.created_date}}</td>
+                                <td>
+                                    <button ng-click="getItemList_A(order_A.order_id)" class="form-control btn-sm">
+                                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="widget-title" ng-if="screenMode_A == 1">
+                        <table class="table table-bordered table-responsive table-stripped"
+                               style="font-size:12px; width: 100%;" cellspacing="0" datatable="ng">
+                            <thead>
+                            <tr>
+                                <th>INVOICE NUMBER</th>
+                                <th>ITEM NAME</th>
+                                <th>ITEM QUANTITY</th>
+                                <th>ITEM PRICE</th>
+                                <th>CREATED DATE</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="item_A in items_A">
+                                <td class="text-capitalize">{{item_A.invoice_number}}</td>
+                                <td class="text-capitalize">{{item_A.item_name}}</td>
+                                <td class="text-capitalize">{{item_A.item_quantity}}</td>
+                                <td class="text-capitalize">{{item_A.item_price}}</td>
+                                <td class="text-capitalize">{{item_A.created_date}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

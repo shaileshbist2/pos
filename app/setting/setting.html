@@ -1,0 +1,116 @@
+<style>
+    .fileContainer {
+        overflow: hidden;
+        position: relative;
+    }
+
+    .fileContainer [type=file] {
+        cursor: inherit;
+        display: block;
+        font-size: 8px;
+        filter: alpha(opacity=0);
+        min-height: 100%;
+        min-width: 100%;
+        opacity: 0;
+        position: absolute;
+        right: 0;
+        text-align: right;
+        top: 0;
+    }
+
+    /* Example stylistic flourishes */
+
+    .fileContainer {
+        background: #F63500;
+        color: #fff;
+        font-weight: 100;
+        font-size: 12px;
+        letter-spacing: 1px;
+        border-radius: 3px;
+        float: left;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+
+    .fileContainer [type=file] {
+        cursor: pointer;
+    }
+</style>
+
+<span ng-if="pageLoader">
+    <div class="loading"></div>
+</span>
+<div ng-show="admin_role_id == 1">
+
+    <div class="heading-sec">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="heading-profile">
+                    <h2>SETTING</h2>
+                <span ng-if="pageLoader">
+                   <div class="loading"></div>
+                </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="panel-content">
+        <div class="row">
+            <div class="widget" style="padding: 12px;">
+                <h4>Manage Bill</h4>
+                <div class="row" style="background: #fafafa; border-radius: 5px; padding: 12px;">
+                    <div class="row">&nbsp;</div>
+                    <div class="col-lg-9 col-md-9 col-sm-9">
+                        1. Do you want to show these options in the bill while printing (CIN/TIN/CST/STN) ?
+                    </div>
+                    <div class="col-lg-1 col-md-1 col-sm-1">
+                        <md-switch ng-model="data.switch1" ng-click="updateVisibilityOpt1(data.switch1)"
+                                   aria-label="Switch 1" style="margin-top: -5px;">
+                            <!--Switch 1: {{ data.switch1 }}-->
+                        </md-switch>
+                    </div>
+                    <div class="row">&nbsp;</div>
+                    <div class="col-lg-9 col-md-9 col-sm-9">
+                        2. Do you want to show the Promotional Offer on the bill while printing for all branch ?
+                    </div>
+                    <div class="col-lg-1 col-md-1 col-sm-1">
+                        <md-switch ng-model="data2.switch2" ng-click="updateVisibilityOpt2(data2.switch2)"
+                                   aria-label="Switch 1" style="margin-top: -5px;">
+                            <!--Switch 1: {{ data.switch1 }}-->
+                        </md-switch>
+                    </div>
+
+                    <div class="col-lg-9 col-md-9 col-sm-9">
+                        3. Do you want to show user name and his number ?
+                    </div>
+                    <div class="col-lg-1 col-md-1 col-sm-1">
+                        <md-switch ng-model="data3.switch3" ng-click="updateVisibilityOpt3(data3.switch3)"
+                                   aria-label="Switch 3" style="margin-top: -5px;">
+                        </md-switch>
+                    </div>
+                    <div class="col-lg-9 col-md-9 col-sm-9">
+                        4. Do you want to show branch / store address ?
+                    </div>
+                    <div class="col-lg-1 col-md-1 col-sm-1">
+                        <md-switch ng-model="data4.switch4" ng-click="updateVisibilityOpt4(data4.switch4)"
+                                   aria-label="Switch 4" style="margin-top: -5px;">
+                        </md-switch>
+                    </div>
+                    <div class="col-lg-9 col-md-9 col-sm-9">
+                        5. Do you want to show company address ?
+                    </div>
+                    <div class="col-lg-1 col-md-1 col-sm-1">
+                        <md-switch ng-model="data5.switch5" ng-click="updateVisibilityOpt5(data5.switch5)"
+                                   aria-label="Switch 5" style="margin-top: -5px;">
+                        </md-switch>
+                    </div>
+                    <div class="row">&nbsp;</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

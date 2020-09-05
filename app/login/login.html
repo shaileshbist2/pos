@@ -1,0 +1,165 @@
+<style>
+    .anchorColor a {
+        color: #ffffff;
+    }
+
+    .anchorColor a:hover {
+        color: #f63500;
+    }
+
+    .ng-invalid.ng-touched {
+        border-color: red !important;
+    }
+
+    .ng-invalid .loginButton {
+        background: grey !important;
+    }
+
+    .loginButton {
+        background: #f63500;
+        border-radius: 29px;
+        height: 46px;
+        width: 142px;
+        color: #fff;
+        font-family: Montserrat;
+        font-size: 13px;
+    }
+
+    button:hover {
+        color: #fff !important;
+    }
+
+    #errorCompanyEmail, #errorCompanyPassword {
+        font-size: 11px;
+        position: absolute;
+        height: 24px;
+        color: #fff;
+        background: #FA787E;
+        padding: 4px 10px 9px;
+        border-radius: 12px;
+        top: -16px;
+    }
+
+    #loginFailedMessage {
+        font-size: 14px;
+        padding: 13px;
+        color: indianred;
+    }
+</style>
+<!--<div id="progressBar">
+    <div class="loader"></div>
+</div>-->
+<div class="account-user-sec">
+    <div class="account-sec">
+        <div class="account-top-bar">
+            <div class="container">
+                <div class="logo">
+                    <a href="./login" title="">
+                        <img src="{{webPath}}images/dexposLogo.png" height="40" width="140"/>
+                    </a>
+                </div>
+                <ul class="account-header-link">
+                    <li><a title="" href="forgot-password">Forgot Your Password</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="acount-sec">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="account-detail">
+                            <ul>
+                                <li>
+                                    <h3><i class="fa fa-file-text" aria-hidden="true"></i>Billing made Easy</h3>
+                                    <p>No bulky hardware or user unfriendly interface for <br/>
+                                        billing. Simple UI and simple hardware.</p>
+                                </li>
+                                <li>
+                                    <h3><i class="fa  fa-television"></i>Inventory Management made Easy</h3>
+                                    <p>Map your inventory to your items and get real time <br/>
+                                        update on inventory levels.</p>
+                                </li>
+                                <li>
+                                    <h3><i class="fa fa-map-o"></i>Reporting made Easy</h3>
+                                    <p>Get real time reports for sales, revenue and other <br/>
+                                        aspects on your desktop or mobile device.</p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="contact-sec">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="widget-title">
+                                        <h3>Admin Panel Login</h3>
+                                        <span>Fill your detail to get in</span>
+                                    </div><!-- Widget title -->
+                                    <div class="account-form">
+                                        <span id="loginFailedMessage">{{loginFailedMessage}}</span>
+                                        <form name="loginForm" ng-submit="branchLogin()">
+                                            <div class="row">
+                                                <div class="feild col-md-12">
+                                                    <span ng-show="loginForm.companyEmail.$invalid && loginForm.companyEmail.$touched"
+                                                          id="errorCompanyEmail">
+                                                        Please enter valid email
+                                                    </span>
+                                                    <input type="text" ng-model="user.email" placeholder="Email"
+                                                           name="companyEmail" ng-required="true"
+                                                           ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/"/>
+                                                </div>
+
+                                                <div class="feild col-md-12">
+                                                    <span ng-show="loginForm.companyPassword.$invalid && loginForm.companyPassword.$touched"
+                                                          id="errorCompanyPassword">
+                                                        Please enter password
+                                                    </span>
+                                                    <input type="password" ng-model="user.password"
+                                                           placeholder="Password" name="companyPassword"
+                                                           ng-required="true"/>
+                                                </div>
+                                                <div class="feild col-md-12">
+                                                    <button class="btn loginButton" ng-disabled="loginForm.$invalid">
+                                                        Login Now
+                                                        <i class="fa fa-circle-o-notch fa-spin fa-1x fa-fw"
+                                                           ng-show="loginSpinner"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="more-option">
+                                        <span>OR</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="creat-an-account">
+                                        <span>Don't have an account?</span>
+                                        <a href="register" title="">Create Account</a>
+                                    </div><!-- Create an account -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <!--<div class="col-lg-3 col-md-3 col-sm-3">&nbsp;</div>-->
+                            <div class="col-lg-9 anchorColor" style="padding: 12px;">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                    <a href="https://www.dexconsulting.com/terms-and-conditions" target="_blank">Terms and Conditions</a>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                                    <a href="https://www.dexconsulting.com/privacy-policy" target="_blank">Privacy Policy</a>
+                                </div>
+                                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                                    <a href="https://www.dexconsulting.com/about-dex" target="_blank">About us</a>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                                    <a href="https://www.dexconsulting.com/contact" target="_blank">Contact us</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

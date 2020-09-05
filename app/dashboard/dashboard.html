@@ -1,0 +1,172 @@
+<!--<div id="progressBar"></div>-->
+
+<div ng-show="admin_role_id == 1">
+<!--<div class="heading-sec">
+    <div class="row">
+        <div class="col-md-4 column">
+            <div class="heading-profile">
+                <h2>Welcome <span class="text-capitalize">{{first_name}}</span></h2>
+            </div>
+        </div>
+        <div class="col-md-8 column">
+            <div class="top-bar-chart">
+                <div class="quick-report">
+                    <div class="quick-report-infos">
+                        <p>Total Revenue</p>
+                        <h3>₹ {{orderPriceData.final_price}}</h3>
+                    </div>
+                </div>
+                <div class="quick-report">
+                    <div class="quick-report-infos">
+                        <p>Total Orders</p>
+                        <h3>{{orderPriceData.total_orders}}</h3>
+                    </div>
+                </div>
+            </div>&lt;!&ndash; Top Bar Chart &ndash;&gt;
+        </div>
+    </div>
+</div>-->
+
+<div class="panel-content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="mini-stats-sec">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="widget enableLoader">
+                            <div class="widget-controls">
+                                <span class="refresh-content" ng-click="refresh_orders_SA()"><i class="fa fa-refresh"></i></span>
+                            </div>
+                            <div class="mini-stats ">
+                                <span class="red-skin"><i class="fa fa-area-chart"></i></span>
+                                <p><i class="fa  fa-arrow-up up"></i> Total Orders</p>
+                                <h3>{{orderPriceData.total_orders}}</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="widget enableLoader">
+                            <div class="widget-controls">
+                                <span class="refresh-content" ng-click="refresh_orders_SA()"><i class="fa fa-refresh"></i></span>
+                            </div>
+                            <div class="mini-stats ">
+                                <span class="sky-skin"><i class="fa fa-usd"></i></span>
+                                <p><i class="fa  fa-arrow-down down"></i>Total Revenue</p>
+                                <h3>₹ {{orderPriceData.final_price}}</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="widget enableLoader">
+                            <div class="widget-controls">
+                                <span class="refresh-content" ng-click="refresh_orders_SA()"><i class="fa fa-refresh"></i></span>
+                            </div>
+                            <div class="mini-stats ">
+                                <span class="sky-skin"><i class="fa fa-map-marker" aria-hidden="true"></i></span>
+                                <p><i class="fa  fa-arrow-down down"></i>Location</p>
+                                <h3>{{orderPriceData.total_branch}}</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="widget-title">
+            <div class="widget" style="padding: 30px;">
+                <table class="table table-bordered table-responsive table-stripped"
+                       style="font-size:12px; width: 100%;" cellspacing="0" datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs">
+                    <thead>
+                    <tr>
+                        <th>LOCATION NAME</th>
+                        <th class="text-center">TOTAL ORDERS</th>
+                        <th class="text-center">TOTAL REVENUE</th>
+                        <th class="text-center">DETAILS</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="bl in bLL">
+                        <td class="text-capitalize">{{bl.location_name}}</td>
+                        <td class="text-capitalize text-center">{{bl.total_orders}}</td>
+                        <td class="text-capitalize text-center">₹ {{bl.final_price}}</td>
+                        <td class="text-capitalize text-center">
+                            <button ng-click="locationOrderInfo(bl.branch_id)" class="btn btn-default btn-sm">
+                                <i class="fa fa-info" aria-hidden="true"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+
+
+
+
+<div ng-show="admin_role_id == 2">
+    <div class="heading-sec">
+        <div class="row">
+            <div class="col-md-4 column">
+                <div class="heading-profile">
+                    <h2>Welcome <span class="text-capitalize">{{first_name}}</span></h2>
+                </div>
+            </div>
+            <div class="col-md-8 column">
+                <div class="top-bar-chart">
+                    <div class="quick-report">
+                        <div class="quick-report-infos">
+                            <p>Total Revenue</p>
+                            <h3>₹ {{orderPriceData_A.final_price}}</h3>
+                        </div>
+                    </div>
+                    <div class="quick-report">
+                        <div class="quick-report-infos">
+                            <p>Total Orders</p>
+                            <h3>{{orderPriceData_A.total_orders}}</h3>
+                        </div>
+                    </div>
+                </div><!-- Top Bar Chart -->
+            </div>
+        </div>
+    </div>
+
+    <div class="panel-content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="mini-stats-sec">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="widget">
+                                <div class="widget-controls">
+                                    <span class="refresh-content" ng-click="refresh_orders_A()"><i class="fa fa-refresh"></i></span>
+                                </div>
+                                <div class="mini-stats ">
+                                    <span class="red-skin"><i class="fa fa-area-chart"></i></span>
+                                    <p><i class="fa  fa-arrow-up up"></i> Total Orders</p>
+                                    <h3>{{orderPriceData_A.total_orders}}</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="widget">
+                                <div class="widget-controls">
+                                    <span class="refresh-content" ng-click="refresh_orders_A()"><i class="fa fa-refresh"></i></span>
+                                </div>
+                                <div class="mini-stats ">
+                                    <span class="sky-skin"><i class="fa fa-usd"></i></span>
+                                    <p><i class="fa  fa-arrow-down down"></i>Total Revenue</p>
+                                    <h3>₹ {{orderPriceData_A.final_price}}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

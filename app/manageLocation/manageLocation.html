@@ -1,0 +1,325 @@
+<style>
+    /*.ng-invalid.ng-touched {
+        border-color: red !important;
+    }*/
+
+    .ng-invalid .registerButton {
+        background: grey !important;
+    }
+
+    #error_first_name, #error_last_name, #errorEmail_id, #error_mobile_number, #errorPassword, #error_update_mobile_number, #error_update_email_id, #error_update_first_name, #error_update_last_name, #error_update_password {
+        font-size: 11px;
+        position: absolute;
+        height: 24px;
+        color: #fff;
+        background: rgba(171, 0, 0, 0.42);
+        padding: 4px 10px 9px;
+        border-radius: 12px;
+        top: 28px;
+        left: 131px;
+    }
+</style>
+
+
+<div ng-show="admin_role_id == 1">
+<span ng-if="pageLoader">
+    <div class="loading"></div>
+</span>
+    <div class="heading-sec">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="heading-profile">
+                    <h2>MANAGE LOCATIONS</h2>
+                </div>
+            </div>
+            <div class="col-md-8" ng-if="addNewLocationBtn == 1">
+                <div class="top-bar-chart">
+                    <div class="quick-report">
+                        <div class="quick-report-infos">
+                        <span style="cursor: pointer" ng-click="add_location()">
+                            + Add New Location
+                        </span>
+                        </div>
+                    </div>
+                </div><!-- Top Bar Chart -->
+            </div>
+
+        </div>
+    </div>
+    <div class="panel-content">
+        <div class="row">
+            <div class="widget animate-show animate-hide" ng-show="animate">
+                <div class="step-form-sec">
+                    <span style="color: red;" ng-show="emailErrorMsg">Email already exist</span>
+                    <form name="addLocationForm" ng-submit="addLocation()">
+                        <div class="col-lg-12 col-md-12 col-sm-12">
+                            <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                                <label>First Name</label>
+                                <span id="error_first_name"
+                                      ng-show="addLocationForm.first_name.$invalid && addLocationForm.first_name.$touched">Invalid First Name</span>
+                                <input type="text" class="form-control text-capitalize input-sm"
+                                       ng-model="loc.first_name"
+                                       name="first_name" ng-pattern="/^[a-zA-Z\s]*$/" ng-required="true"/>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                                <label>Last Name</label>
+                                <span id="error_last_name"
+                                      ng-show="addLocationForm.last_name.$invalid && addLocationForm.last_name.$touched">Invalid Last Name</span>
+                                <input type="text" class="form-control text-capitalize input-sm"
+                                       ng-model="loc.last_name"
+                                       name="last_name" ng-pattern="/^[a-zA-Z\s]*$/" ng-required="true"/>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                                <label>Mobile number</label>
+                                <span id="error_mobile_number"
+                                      ng-show="addLocationForm.mobile_number.$invalid && addLocationForm.mobile_number.$touched">Enter valid number</span>
+                                <input type="text" class="form-control text-capitalize input-sm"
+                                       ng-model="loc.mobile_number"
+                                       name="mobile_number" ng-required="true" valid-number ng-maxlength="10"
+                                       ng-minlength="10"/>
+                            </div>
+
+                            <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                                <label>Email Id</label>
+                                <span id="errorEmail_id"
+                                      ng-show="addLocationForm.email_id.$invalid && addLocationForm.email_id.$touched">Please enter valid email</span>
+                                <input type="email" class="form-control input-sm" ng-model="loc.email_id"
+                                       name="email_id"
+                                       ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/" ng-required="true"/>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                                <label>Password</label>
+                                <span id="errorPassword"
+                                      ng-show="addLocationForm.password.$invalid && addLocationForm.password.$touched">Should be 6 characters</span>
+                                <input type="password" class="form-control text-capitalize input-sm"
+                                       ng-model="loc.password"
+                                       name="password" ng-minlength="6" ng-required="true"/>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                                <label>Location Name</label>
+                                <input type="text" class="form-control text-capitalize input-sm"
+                                       ng-model="loc.location_name"
+                                       name="location" ng-required="true"/>
+                            </div>
+                            <div class="col-lg-8 col-md-8 col-sm-8 form-group">
+                                <label>Address</label>
+                                <input type="text" class="form-control text-capitalize input-sm"
+                                       ng-model="loc.location_address"
+                                       name="address" ng-required="true"/>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                                <label></label>
+                                <button ng-disabled="addLocationForm.$invalid" class="btn btn-primary btn-sm"
+                                        style="top:24px; position:absolute;">Add Location
+                                </button>
+                            </div>
+                            <!--<div class="col-lg-6">
+                                <div id="map_container" style="width: 440px; height: 300px;"></div>
+                            </div>-->
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="panel-content">
+        <div class="row">
+            <div class="widget" ng-show="editLocationContainer">
+                <div class="step-form-sec">
+                    <div class="row">
+                        <div class="col-lg-11">&nbsp;</div>
+                        <div class="col-lg-1">
+                            <button class="btn btn-default btn-sm" ng-click="back()">Back</button>
+                        </div>
+                        <div class="row">&nbsp;</div>
+                        <div class="row">&nbsp;</div>
+                    </div>
+
+                    <form name="editLocationForm">
+                        <div class="col-lg-12 col-md-12 col-sm-12">
+                            <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                                <label>First Name</label>
+                        <span id="error_update_first_name"
+                              ng-show="editLocationForm.update_first_name.$invalid && editLocationForm.update_first_name.$touched">Invalid First Name</span>
+                                <input type="text" ng-model="update_first_name" name="update_first_name"
+                                       placeholder="First Name" class="form-control text-capitalize input-sm"
+                                       ng-pattern="/^[a-zA-Z\s]*$/" ng-required="true"/>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                                <label>Last Name</label>
+                        <span id="error_update_last_name"
+                              ng-show="editLocationForm.update_last_name.$invalid && editLocationForm.update_last_name.$touched">Invalid Last Name</span>
+                                <input type="text" ng-model="update_last_name" name="update_last_name"
+                                       placeholder="Last Name"
+                                       class="form-control text-capitalize input-sm" ng-pattern="/^[a-zA-Z\s]*$/"
+                                       ng-required="true"/>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                                <label>Mobile Number</label>
+                        <span id="error_update_mobile_number"
+                              ng-show="editLocationForm.update_mobile_number.$invalid && editLocationForm.update_mobile_number.$touched">Enter valid number</span>
+                                <input type="text" ng-model="update_mobile_number" name="update_mobile_number"
+                                       placeholder="Mobile Number" class="form-control text-capitalize input-sm"
+                                       ng-required="true" valid-number ng-minlength="10" ng-maxlength="10" />
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                                <label>Email Id</label>
+                        <span id="error_update_email_id"
+                              ng-show="editLocationForm.update_email_id.$invalid && editLocationForm.update_email_id.$touched">Please enter valid email</span>
+                                <input type="email" ng-model="update_email_id" name="update_email_id"
+                                       placeholder="Email Id"
+                                       class="form-control input-sm" ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/"
+                                       ng-required="true"/>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                                <label>Password</label>
+                        <span id="error_update_password"
+                              ng-show="editLocationForm.update_password.$invalid && editLocationForm.update_password.$touched">6 characters long</span>
+                                <input type="password" ng-model="update_password" name="update_password" placeholder="Password" class="form-control input-sm" ng-minlength="6" />
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                                <label>Location Name</label>
+                                <input type="text" ng-model="update_location_name" placeholder="Location Name"
+                                       class="form-control text-capitalize input-sm" ng-required="true"/>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                                <label>Status</label>
+                                <select ng-model="update_status" class="form-control text-capitalize input-sm"
+                                        ng-required="true">
+                                    <option value="1">Active</option>
+                                    <option value="0">Inactive</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-8 col-md-8 col-sm-8 form-group">
+                                <label>Address</label>
+                                <input type="text" ng-model="update_address" placeholder="Address"
+                                       class="form-control text-capitalize input-sm" ng-required="true"/>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                                <br/>
+                                <button ng-click="updateLocation(location_id)" ng-disabled="editLocationForm.$invalid"
+                                        class="btn btn-primary btn-sm">Update
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="panel-content">
+        <div class="row" ng-if="listView == 1">
+            <div class="widget">
+                <div class="table-area">
+                    <div class="widget-title">
+                        <table class="table table-bordered table-responsive table-stripped"
+                               style="width: 100%; font-size: 12px;"
+                               cellspacing="0" datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs">
+                            <thead>
+                            <tr style="font-size: 11px;">
+                                <th>ADMIN NAME</th>
+                                <th>LOCATION NAME</th>
+                                <th>ADDRESS</th>
+                                <th class="text-center">STATUS</th>
+                                <th class="text-center">CREATED DATE</th>
+                                <th class="text-center">ACTION</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="location in locations">
+                                <td class="text-capitalize">
+                                    <span ng-hide="locName == location.location_id">{{location.admin_name}}</span>
+                                </td>
+                                <td class="text-capitalize">
+                                    <span ng-hide="locName == location.location_id">{{location.location_name}}</span>
+                                </td>
+                                <td class="text-capitalize">
+                                    <span ng-hide="locAddress == location.location_id">{{location.address}}</span>
+                                </td>
+                                <td class="text-capitalize text-center">
+                                    <span ng-hide="locStatus == location.location_id">{{location.status}}</span>
+                                </td>
+                                <td class="text-center">
+                                    {{location.created_date}}
+                                </td>
+                                <td class="text-center">
+                                    <button ng-click="editLocation(location.location_id)" class="form-control btn-sm"
+                                            ng-hide="editBtn == location.location_id">
+                                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<script>
+    /*google.maps.event.addDomListener(window, 'load', initialize);
+
+
+     function initialize() {
+     var input = document.getElementById('street');
+     var autocomplete = new google.maps.places.Autocomplete(input);
+     }
+
+     function locate() {
+     navigator.geolocation.getCurrentPosition(success, fail);
+     }
+
+     function success(position) {
+     var myLatLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+     $('#latitude').val(position.coords.latitude.toFixed(6));
+     $('#longitude').val(position.coords.longitude.toFixed(6));
+     var mapOptions = {
+     zoom: 8,
+     center: myLatLng,
+     mapTypeId: google.maps.MapTypeId.ROADMAP
+     }
+     var map = new google.maps.Map(document.getElementById('map_container'), mapOptions);
+     var userMarker = new google.maps.Marker({
+     position: myLatLng,
+     map: map,
+     title: 'Drag marker to your location',
+     draggable: true
+     });
+     google.maps.event.addListener(userMarker, 'dragend', function (pos) {
+     $('#latitude').val(pos.latLng.lat().toFixed(6));
+     $('#longitude').val(pos.latLng.lng().toFixed(6));
+     });
+     google.maps.event.addListener(map, 'click', function (event) {
+     placeMarker(event.latLng);
+     });
+
+     function placeMarker(location) {
+     if (userMarker == undefined) {
+     userMarker = new google.maps.Marker({
+     position: location,
+     map: map,
+     animation: google.maps.Animation.DROP
+     });
+     }
+     else {
+     userMarker.setPosition(location);
+     }
+     map.setCenter(location);
+     $('#latitude').val(location.lat().toFixed(6));
+     $('#longitude').val(location.lng().toFixed(6));
+     }
+     }
+     function fail() {
+     alert('navigator.geolocation failed, may not be supported');
+     }*/
+
+
+</script>

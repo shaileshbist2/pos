@@ -1,0 +1,216 @@
+<div class="top-bar">
+    <div class="logo">
+        <a href="./dashboard" title="dexpos">
+            <img src="{{webPath}}images/dexpos logo_gray.png" height="26"/>
+        </a>
+        <div class="menu-options"><span class="menu-action"><i></i></span></div>
+    </div>
+
+    <div class="quick-links">
+        <ul>
+            <li class="text-capitalize" style="margin-top: 8px;">
+                {{first_name}}&nbsp;&nbsp;&nbsp;&nbsp;
+            </li>
+            <li>
+                <a title="" class="sky-skin">
+                    <i class="fa fa-arrow-down" aria-hidden="true"></i>
+                </a>
+                <div class="dialouge notification" style="display: none;">
+                    <a href="login" ng-click="logout()">
+                        <i class="fa fa-sign-out" aria-hidden="true"></i>
+                        Logout
+                    </a>
+                </div>
+                &nbsp;&nbsp;&nbsp;
+            </li>
+            <li>
+                <img ng-src="{{company_logo}}" id="headerCompanyLogo" style="height: 34px; border-radius: 4px;"/>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<!-- Top Bar -->
+<header class="side-header light-skin opened-menu">
+    <div class="admin-details">
+    </div>
+    <div class="menu-scroll">
+        <div class="side-menus" style="height:100% !important;">
+            <nav>
+                <ul ng-show="!isAuthorizedProfileValue()">
+                    <li>
+                        <a href="dashboard" title="">
+                            <i class="fa fa-dashboard"></i> Dashboard
+                        </a>
+                    </li>
+                    <li ng-show="admin_role_id == 1">
+                        <a href="manage_location" title="">
+                            <i class="fa fa-location-arrow" aria-hidden="true"></i> Manage Location
+                        </a>
+                    </li>
+                    <li class="menu-item-has-children" ng-show="admin_role_id == 1">
+                        <a href="" title=""><i class="fa fa-cutlery" aria-hidden="true"></i> Manage Inventory</a>
+                        <ul>
+                            <li ng-show="admin_role_id == 1"><a href="manage_inventory" title=""><i
+                                    class="fa fa-circle-o-notch"></i> <span>Warehouse Inventory</span></a></li>
+                            <li ng-show="admin_role_id == 1"><a href="allot_inventory" title=""><i
+                                    class="fa fa-circle-o-notch"></i> <span>Outlet Transfer Item</span></a></li>
+                            <li ng-show="admin_role_id == 1"><a href="inventory_category" title=""><i
+                                    class="fa fa-circle-o-notch"></i> <span>Inventory Category</span></a></li>
+                            <li ng-show="admin_role_id == 1"><a href="inventory_item" title=""><i
+                                    class="fa fa-circle-o-notch"></i> <span>Inventory Item</span></a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="manage_categories" title="">
+                            <i class="fa fa-tags" aria-hidden="true"></i>
+                            Manage Categories
+                        </a>
+                    </li>
+                    <li>
+                        <a href="manage_items" title="">
+                            <i class="fa fa-tasks" aria-hidden="true"></i>
+                            Manage Items
+                        </a>
+                    </li>
+                    <li>
+                        <a href="manage_orders" title="">
+                            <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                            Manage Orders
+                        </a>
+                    </li>
+                    <li>
+                        <a href="manage_users" title="">
+                            <i class="fa fa-user" aria-hidden="true"></i>
+                            Manage Users
+                        </a>
+                    </li>
+                    <li ng-show="admin_role_id == 1">
+                        <a href="manage_vendor" title="">
+                            <i class="fa fa-building-o" aria-hidden="true"></i>
+                            Manage Vendor
+                        </a>
+                    </li>
+                    <li ng-show="admin_role_id == 1">
+                        <a href="manage_offer" title="">
+                            <i class="fa fa-tags" aria-hidden="true"></i>
+                            Manage Offers
+                        </a>
+                    </li>
+                    <li ng-show="admin_role_id == 1">
+                        <a href="setting" title="">
+                            <i class="fa fa-cog" aria-hidden="true"></i>
+                            Setting
+                        </a>
+                    </li>
+                </ul>
+                <ul>
+                    <li ng-show="admin_role_id == 1">
+                        <a href="company_profile" title="">
+                            <i class="fa fa-building-o" aria-hidden="true"></i>
+                            Company Profile
+                        </a>
+                    </li>
+                    <li>
+                        <a href="login" ng-click="logout()" title="">
+                            <i class="fa fa-sign-out"></i>
+                            Logout
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div><!-- Menu Scroll -->
+</header>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        "use strict";
+        //***** Side Menu *****//
+        $(".side-menus li.menu-item-has-children > a").on("click", function () {
+            $(this).parent().siblings().children("ul").slideUp();
+            $(this).parent().siblings().removeClass("active");
+            $(this).parent().children("ul").slideToggle();
+            $(this).parent().toggleClass("active");
+            return false;
+        });
+
+        //***** Side Menu Option *****//
+        $('.menu-options').on("click", function () {
+            $(".side-header.opened-menu").toggleClass('slide-menu');
+            $(".main-content").toggleClass('wide-content');
+            $("footer").toggleClass('wide-footer');
+            $(".menu-options").toggleClass('active');
+        });
+
+        /*** FIXED Menu APPEARS ON SCROLL DOWN ***/
+        $(window).scroll(function () {
+            var scroll = $(window).scrollTop();
+            if (scroll >= 10) {
+                $(".side-header").addClass("sticky");
+            }
+            else {
+                $(".side-header").removeClass("sticky");
+                $(".side-header").addClass("");
+            }
+        });
+
+        $(".side-menus nav > ul > li ul li > a").on("click", function () {
+            $(".side-header").removeClass("slide-menu");
+            $(".menu-options").removeClass("active");
+        });
+
+        //***** Quick Stats *****//
+        $('.show-stats').on("click", function () {
+            $(".toggle-content").addClass('active');
+        });
+
+        //***** Quick Stats *****//
+        $('.toggle-content > span').on("click", function () {
+            $(".toggle-content").removeClass('active');
+        });
+
+        //***** Quick Stats *****//
+        $('.quick-links > ul > li > a').on("click", function () {
+            $(this).parent().siblings().find('.dialouge').fadeOut();
+            $(this).next('.dialouge').fadeIn();
+            return false;
+        });
+
+        $("html").on("click", function () {
+            $(".dialouge").fadeOut();
+        });
+        $(".quick-links > ul > li > a, .dialouge").on("click", function (e) {
+            e.stopPropagation();
+        });
+
+        //***** Toggle Full Screen *****//
+        function goFullScreen() {
+            var
+                    el = document.documentElement
+                    , rfs =
+                            el.requestFullScreen
+                            || el.webkitRequestFullScreen
+                            || el.mozRequestFullScreen
+                            || el.msRequestFullscreen
+
+                    ;
+            rfs.call(el);
+        }
+
+        $("#toolFullScreen").on("click", function () {
+            goFullScreen();
+        });
+
+        //***** Side Menu *****//
+        $(function () {
+            $('.side-menus').slimScroll({
+                height: '100%',
+                wheelStep: 10,
+                size: '2px'
+            });
+        });
+
+        $(".data-attributes span").peity("donut");
+    });
+</script>
